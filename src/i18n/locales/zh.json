@@ -4,23 +4,14 @@
     "about": "关于"
   },
   "home": {
-    "title": "Vue3 + Vite 项目",
-    "description": "这是一个使用 Vue3、Vite、Vue Router、Pinia 和 Vue I18n 构建的项目"
+    "title": "首页",
+    "description": "这是首页内容"
   },
   "about": {
     "title": "关于页面",
     "description": "这是关于页面"
   },
-  "counter": {
-    "title": "计数器示例 (Pinia)",
-    "count": "当前计数",
-    "double": "双倍计数",
-    "increment": "增加",
-    "decrement": "减少",
-    "reset": "重置"
-  },
   "language": {
-    "switch": "切换语言",
     "zh": "中文",
     "en": "English"
   }

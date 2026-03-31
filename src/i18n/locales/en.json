@@ -4,23 +4,14 @@
     "about": "About"
   },
   "home": {
-    "title": "Vue3 + Vite Project",
-    "description": "This is a project built with Vue3, Vite, Vue Router, Pinia and Vue I18n"
+    "title": "Home",
+    "description": "This is the home page"
   },
   "about": {
     "title": "About Page",
     "description": "This is the about page"
   },
-  "counter": {
-    "title": "Counter Example (Pinia)",
-    "count": "Current Count",
-    "double": "Double Count",
-    "increment": "Increment",
-    "decrement": "Decrement",
-    "reset": "Reset"
-  },
   "language": {
-    "switch": "Switch Language",
     "zh": "中文",
     "en": "English"
   }
