@@ -5,7 +5,9 @@
   },
   "home": {
     "title": "首页",
-    "description": "这是首页内容"
+    "description": "这是首页内容",
+    "title1": "标题一",
+    "content1": "内容1"
   },
   "about": {
     "title": "关于页面",

@@ -1,8 +1,22 @@
 <template>
   <div class="home">
-    <div class="card">
+    <div 
+      ref="firstCardRef"
+      class="card card-first" 
+      :class="{ 'animate': showFirstCard }"
+      :style="firstCardStyle"
+    >
       <h1>{{ $t('home.title') }}</h1>
       <p>{{ $t('home.description') }}</p>
+    </div>
+    <div 
+      ref="secondCardRef"
+      class="card card-second" 
+      :class="{ 'animate': showSecondCard }"
+      :style="secondCardStyle"
+    >
+      <h1>{{ $t('home.title1') }}</h1>
+      <p>{{ $t('home.content1') }}</p>
     </div>
     <div class="floating-menus">
       <!-- 语言切换菜单 -->
@@ -79,6 +93,18 @@ import { setLocale } from '@/i18n'
 const themeStore = useThemeStore()
 const { locale } = useI18n()
 
+// 卡片动画控制
+const showFirstCard = ref(false)
+const showSecondCard = ref(false)
+
+// 卡片引用
+const firstCardRef = ref(null)
+const secondCardRef = ref(null)
+
+// 卡片旋转状态
+const firstCardRotate = ref({ x: 0, y: 0 })
+const secondCardRotate = ref({ x: 0, y: 0 })
+
 // 主题菜单
 const isMenuOpen = ref(false)
 const menuContainer = ref(null)
@@ -86,6 +112,17 @@ const menuContainer = ref(null)
 // 语言菜单
 const isLangMenuOpen = ref(false)
 const langMenuContainer = ref(null)
+
+// 计算卡片样式
+const firstCardStyle = computed(() => ({
+  '--rotate-x': `${firstCardRotate.value.x}deg`,
+  '--rotate-y': `${firstCardRotate.value.y}deg`,
+}))
+
+const secondCardStyle = computed(() => ({
+  '--rotate-x': `${secondCardRotate.value.x}deg`,
+  '--rotate-y': `${secondCardRotate.value.y}deg`,
+}))
 
 const currentLocale = computed(() => locale.value)
 
@@ -155,12 +192,71 @@ function handleClickOutside(event) {
   }
 }
 
+// 计算卡片倾斜角度
+function calculateTilt(mouseX, mouseY, cardElement) {
+  const rect = cardElement.getBoundingClientRect()
+  const centerX = rect.left + rect.width / 2
+  const centerY = rect.top + rect.height / 2
+
+  // 计算鼠标相对于卡片中心的偏移（-1 到 1）
+  let percentX = (mouseX - centerX) / (rect.width / 2)
+  let percentY = (mouseY - centerY) / (rect.height / 2)
+
+  // 限制偏移范围在 -1 到 1 之间，防止角度过大
+  percentX = Math.max(-1, Math.min(1, percentX))
+  percentY = Math.max(-1, Math.min(1, percentY))
+
+  // 限制最大倾斜角度为 15 度
+  const maxTilt = 15
+  const rotateY = percentX * maxTilt
+  const rotateX = -percentY * maxTilt
+
+  return { x: rotateX, y: rotateY }
+}
+
+// 鼠标移动处理（使用 requestAnimationFrame 节流）
+let rafId = null
+function handleMouseMove(event) {
+  if (rafId) return
+  
+  rafId = requestAnimationFrame(() => {
+    if (firstCardRef.value) {
+      firstCardRotate.value = calculateTilt(event.clientX, event.clientY, firstCardRef.value)
+    }
+    if (secondCardRef.value) {
+      secondCardRotate.value = calculateTilt(event.clientX, event.clientY, secondCardRef.value)
+    }
+    rafId = null
+  })
+}
+
+// 鼠标离开页面时重置倾斜
+function handleMouseLeave() {
+  firstCardRotate.value = { x: 0, y: 0 }
+  secondCardRotate.value = { x: 0, y: 0 }
+}
+
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  document.addEventListener('mousemove', handleMouseMove)
+  document.addEventListener('mouseleave', handleMouseLeave)
+  
+  // 触发卡片跃出动画
+  setTimeout(() => {
+    showFirstCard.value = true
+  }, 100)
+  setTimeout(() => {
+    showSecondCard.value = true
+  }, 400)
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('mousemove', handleMouseMove)
+  document.removeEventListener('mouseleave', handleMouseLeave)
+  if (rafId) {
+    cancelAnimationFrame(rafId)
+  }
 })
 </script>
 
@@ -173,6 +269,9 @@ onUnmounted(() => {
   background: linear-gradient(135deg, var(--background) 0%, var(--primary-bg) 100%);
   padding: 1.5rem;
   transition: background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  perspective: 1000px;
 }
 
 .card {
@@ -187,6 +286,50 @@ onUnmounted(() => {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* 第一个卡片 - 从中心跃出到偏左上 */
+.card-first {
+  transform: translate(-50%, -50%) scale(0.3);
+  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.4s ease;
+}
+
+.card-first.animate {
+  opacity: 1;
+  top: 35%;
+  left: 30%;
+  transform: translate(-50%, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.4s ease,
+              transform 0.1s ease-out;
+}
+
+/* 第二个卡片 - 从中心跃出到偏右下 */
+.card-second {
+  transform: translate(-50%, -50%) scale(0.3);
+  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.4s ease;
+}
+
+.card-second.animate {
+  opacity: 1;
+  top: 65%;
+  left: 70%;
+  transform: translate(-50%, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.4s ease,
+              transform 0.1s ease-out;
 }
 
 .card h1 {
@@ -202,6 +345,70 @@ onUnmounted(() => {
   font-size: 1.125rem;
   line-height: 1.6;
   transition: color 0.3s ease;
+}
+
+/* 响应式适配 - 窄屏 */
+@media (max-width: 768px) {
+  .home {
+    padding: 1rem;
+  }
+
+  .card {
+    padding: 1.5rem 1rem;
+    max-width: none;
+    width: 80%;
+  }
+
+  .card-first.animate {
+    top: 38%;
+    left: 3%;
+    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  }
+
+  .card-second.animate {
+    top: 60%;
+    left: auto;
+    right: 3%;
+    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  }
+
+  .card h1 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .card p {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1.25rem 1rem;
+    width: 80%;
+  }
+
+  .card-first.animate {
+    top: 36%;
+    left: 3%;
+    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  }
+
+  .card-second.animate {
+    top: 55%;
+    left: auto;
+    right: 3%;
+    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  }
+
+  .card h1 {
+    font-size: 1.125rem;
+  }
+
+  .card p {
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
 }
 
 .floating-menus {
@@ -247,7 +454,7 @@ onUnmounted(() => {
 .dropdown-menu {
   position: absolute;
   bottom: calc(100% + 0.5rem);
-  right: 0;
+  right: 3%;
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 0.75rem;

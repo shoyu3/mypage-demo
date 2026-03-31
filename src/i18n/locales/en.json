@@ -5,7 +5,9 @@
   },
   "home": {
     "title": "Home",
-    "description": "This is the home page"
+    "description": "This is the home page",
+    "title1": "Title One",
+    "content1": "Content 1"
   },
   "about": {
     "title": "About Page",
