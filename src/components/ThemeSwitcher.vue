@@ -3,13 +3,14 @@
     <!-- 明暗模式切换 -->
     <button
       class="mode-toggle"
-      :class="{ 'is-dark': themeStore.isDark }"
+      :class="{ 'is-dark': themeStore.isDark, 'is-auto': themeStore.isAuto }"
       @click="themeStore.toggleMode()"
-      :title="themeStore.isDark ? '切换到浅色模式' : '切换到深色模式'"
+      :title="modeTitle"
     >
       <span class="mode-icon">
-        {{ themeStore.isDark ? '🌙' : '☀️' }}
+        {{ modeIcon }}
       </span>
+      <span v-if="themeStore.isAuto" class="auto-badge">A</span>
     </button>
 
     <!-- 主题色选择 -->
@@ -41,6 +42,16 @@ const themeLabels = {
   blue: '蓝色主题',
   green: '绿色主题',
 }
+
+const modeIcon = computed(() => {
+  if (themeStore.isAuto) return '🌓'
+  return themeStore.isDark ? '🌙' : '☀️'
+})
+
+const modeTitle = computed(() => {
+  if (themeStore.isAuto) return '当前为自动模式（跟随系统），点击切换到浅色模式'
+  return themeStore.isDark ? '当前为深色模式，点击切换到自动模式' : '当前为浅色模式，点击切换到深色模式'
+})
 
 function getThemeLabel(theme) {
   return themeLabels[theme] || theme
@@ -75,10 +86,21 @@ function getThemeStyle(theme) {
   &.is-dark {
     background: var(--primary-bg);
   }
+
+  &.is-auto {
+    background: linear-gradient(135deg, var(--primary-bg) 50%, var(--muted-bg) 50%);
+  }
 }
 
 .mode-icon {
   @apply text-lg;
+}
+
+.auto-badge {
+  @apply absolute -top-1 -right-1 text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full;
+  background: var(--primary);
+  color: white;
+  font-size: 10px;
 }
 
 .color-picker {

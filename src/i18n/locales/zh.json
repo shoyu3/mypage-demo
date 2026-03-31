@@ -12,7 +12,15 @@
     "description": "这是关于页面"
   },
   "language": {
+    "switch": "切换语言",
     "zh": "中文",
     "en": "English"
+  },
+  "theme": {
+    "mode": "主题模式",
+    "color": "主题颜色",
+    "auto": "自动",
+    "light": "浅色",
+    "dark": "深色"
   }
 }

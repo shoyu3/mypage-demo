@@ -12,7 +12,15 @@
     "description": "This is the about page"
   },
   "language": {
+    "switch": "Language",
     "zh": "中文",
     "en": "English"
+  },
+  "theme": {
+    "mode": "Theme Mode",
+    "color": "Theme Color",
+    "auto": "Auto",
+    "light": "Light",
+    "dark": "Dark"
   }
 }

@@ -24,7 +24,18 @@ function getInitialLocale() {
 
 export function setLocale(i18nInstance, locale) {
   if (SUPPORTED_LOCALES.includes(locale)) {
-    i18nInstance.global.locale.value = locale
+    // 支持传入 i18n 实例或 locale ref 对象
+    if (i18nInstance.global) {
+      // 传入的是 i18n 实例
+      i18nInstance.global.locale.value = locale
+    } else if (typeof i18nInstance === 'string') {
+      // 传入的是 locale ref 的 value
+      // 这种情况下需要导入 i18n 实例
+      i18n.global.locale.value = locale
+    } else if (i18nInstance.value !== undefined) {
+      // 传入的是 locale ref 对象
+      i18nInstance.value = locale
+    }
     localStorage.setItem(STORAGE_KEY, locale)
     document.documentElement.setAttribute('lang', locale)
   }

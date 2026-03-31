@@ -76,6 +76,10 @@ export function generateCSSVariables(mode, themeName) {
   const base = baseColors[mode]
   const theme = themeColors[themeName][mode]
 
+  // 毛玻璃效果背景色 - 根据模式切换
+  const glassBg = mode === 'dark' ? 'rgba(22, 23, 29, 0.7)' : 'rgba(255, 255, 255, 0.7)'
+  const glassBorder = mode === 'dark' ? 'rgba(46, 48, 58, 0.5)' : 'rgba(255, 255, 255, 0.3)'
+
   return {
     '--background': base.background,
     '--foreground': base.foreground,
@@ -86,6 +90,8 @@ export function generateCSSVariables(mode, themeName) {
     '--primary-hover': theme['primary-hover'],
     '--primary-bg': theme['primary-bg'],
     '--primary-border': theme['primary-border'],
+    '--glass-bg': glassBg,
+    '--glass-border': glassBorder,
   }
 }
 
@@ -107,10 +113,18 @@ export function applyTheme(mode, themeName) {
   localStorage.setItem('theme-color', themeName)
 }
 
+// 获取系统主题模式
+export function getSystemMode() {
+  if (typeof window === 'undefined') return 'light'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 // 获取保存的主题设置
 export function getSavedTheme() {
+  const savedMode = localStorage.getItem('theme-mode')
   return {
-    mode: localStorage.getItem('theme-mode') || 'light',
+    // 默认为 'auto'，支持 'light' | 'dark' | 'auto'
+    mode: savedMode || 'auto',
     themeName: localStorage.getItem('theme-color') || 'purple',
   }
 }

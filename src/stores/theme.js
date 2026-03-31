@@ -3,41 +3,58 @@ import { ref, computed, watch } from 'vue'
 import {
   applyTheme,
   getSavedTheme,
+  getSystemMode,
   createCustomTheme,
   registerCustomTheme,
   availableThemes,
 } from '@/config/theme.config'
 
 export const useThemeStore = defineStore('theme', () => {
-  // 状态
-  const mode = ref('light')
+  // 状态 - mode 支持 'light' | 'dark' | 'auto'
+  const mode = ref('auto')
   const themeName = ref('purple')
   const customThemes = ref(new Map())
 
-  // 计算属性
-  const isDark = computed(() => mode.value === 'dark')
+  // 计算属性 - 实际生效的模式（auto 时根据系统决定）
+  const effectiveMode = computed(() => {
+    if (mode.value === 'auto') {
+      return getSystemMode()
+    }
+    return mode.value
+  })
+
+  const isDark = computed(() => effectiveMode.value === 'dark')
+  const isAuto = computed(() => mode.value === 'auto')
   const currentTheme = computed(() => themeName.value)
   const availableThemeList = computed(() => [...availableThemes, ...customThemes.value.keys()])
+
+  // 监听 effectiveMode 变化，自动应用主题
+  watch(effectiveMode, (newMode) => {
+    applyTheme(newMode, themeName.value)
+  })
 
   // 初始化主题
   function initTheme() {
     const saved = getSavedTheme()
     mode.value = saved.mode
     themeName.value = saved.themeName
-    applyTheme(mode.value, themeName.value)
+    applyTheme(effectiveMode.value, themeName.value)
   }
 
-  // 切换明暗模式
+  // 切换明暗模式（light -> dark -> auto -> light）
   function toggleMode() {
-    mode.value = mode.value === 'light' ? 'dark' : 'light'
-    applyTheme(mode.value, themeName.value)
+    const modes = ['light', 'dark', 'auto']
+    const currentIndex = modes.indexOf(mode.value)
+    const nextIndex = (currentIndex + 1) % modes.length
+    setMode(modes[nextIndex])
   }
 
   // 设置模式
   function setMode(newMode) {
-    if (newMode === 'light' || newMode === 'dark') {
+    if (newMode === 'light' || newMode === 'dark' || newMode === 'auto') {
       mode.value = newMode
-      applyTheme(mode.value, themeName.value)
+      localStorage.setItem('theme-mode', newMode)
+      applyTheme(effectiveMode.value, themeName.value)
     }
   }
 
@@ -45,7 +62,8 @@ export const useThemeStore = defineStore('theme', () => {
   function setThemeColor(name) {
     if (availableThemes.includes(name) || customThemes.value.has(name)) {
       themeName.value = name
-      applyTheme(mode.value, themeName.value)
+      localStorage.setItem('theme-color', name)
+      applyTheme(effectiveMode.value, themeName.value)
     }
   }
 
@@ -76,11 +94,10 @@ export const useThemeStore = defineStore('theme', () => {
   function listenToSystemTheme() {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
 
-    const handleChange = (e) => {
-      // 只在用户没有手动设置过主题时自动切换
-      const hasUserPreference = localStorage.getItem('theme-mode')
-      if (!hasUserPreference) {
-        setMode(e.matches ? 'dark' : 'light')
+    const handleChange = () => {
+      // 只在 auto 模式下响应系统主题变化
+      if (mode.value === 'auto') {
+        applyTheme(getSystemMode(), themeName.value)
       }
     }
 
@@ -92,9 +109,9 @@ export const useThemeStore = defineStore('theme', () => {
   function resetToSystem() {
     localStorage.removeItem('theme-mode')
     localStorage.removeItem('theme-color')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    setMode(prefersDark ? 'dark' : 'light')
-    setThemeColor('purple')
+    mode.value = 'auto'
+    themeName.value = 'purple'
+    applyTheme(getSystemMode(), 'purple')
   }
 
   return {
@@ -104,7 +121,9 @@ export const useThemeStore = defineStore('theme', () => {
     customThemes,
 
     // 计算属性
+    effectiveMode,
     isDark,
+    isAuto,
     currentTheme,
     availableThemeList,
 
