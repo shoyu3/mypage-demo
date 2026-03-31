@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+  "packageManager": "pnpm@10.29.2",
   "scripts": {
     "dev": "vite --host --port 9800",
     "build": "vite build",
@@ -17,6 +18,9 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.5",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.2",
     "vite": "^8.0.1"
   }
 }
