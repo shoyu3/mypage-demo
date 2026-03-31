@@ -1,0 +1,22 @@
+{
+  "name": "mypage-demo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host --port 9800",
+    "build": "vite build",
+    "preview": "vite preview --host --port 9800",
+    "start": "vite build && vite preview --host --port 9800"
+  },
+  "dependencies": {
+    "pinia": "^3.0.4",
+    "vue": "^3.5.30",
+    "vue-i18n": "^11.3.0",
+    "vue-router": "^5.0.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.5",
+    "vite": "^8.0.1"
+  }
+}
