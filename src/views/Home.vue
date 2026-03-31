@@ -1,22 +1,41 @@
 <template>
   <div class="home">
     <div 
-      ref="firstCardRef"
-      class="card card-first" 
-      :class="{ 'animate': showFirstCard }"
-      :style="firstCardStyle"
+      ref="cardsContainerRef"
+      class="cards-container"
+      :style="containerStyle"
     >
-      <h1>{{ $t('home.title') }}</h1>
-      <p>{{ $t('home.description') }}</p>
-    </div>
-    <div 
-      ref="secondCardRef"
-      class="card card-second" 
-      :class="{ 'animate': showSecondCard }"
-      :style="secondCardStyle"
-    >
-      <h1>{{ $t('home.title1') }}</h1>
-      <p>{{ $t('home.content1') }}</p>
+      <div 
+        ref="firstCardRef"
+        class="card card-first" 
+        :class="{ 'animate': showFirstCard }"
+      >
+        <h1>{{ $t('home.title') }}</h1>
+        <p>{{ $t('home.description') }}</p>
+      </div>
+      <div
+        ref="secondCardRef"
+        class="card card-second"
+        :class="{ 'animate': showSecondCard }"
+      >
+        <h1>{{ $t('home.title1') }}</h1>
+        <p>{{ $t('home.content1') }}</p>
+        <!-- 传感器数据显示（检测中或启用传感器模式时显示） -->
+        <div v-if="isSensorDetecting || useSensorTilt" class="sensor-data">
+          <div class="sensor-item">
+            <span class="sensor-label">Gamma:</span>
+            <span class="sensor-value">{{ sensorData.gamma.toFixed(1) }}°</span>
+          </div>
+          <div class="sensor-item">
+            <span class="sensor-label">Beta:</span>
+            <span class="sensor-value">{{ sensorData.beta.toFixed(1) }}°</span>
+          </div>
+          <div class="sensor-item">
+            <span class="sensor-label">Alpha:</span>
+            <span class="sensor-value">{{ sensorData.alpha.toFixed(1) }}°</span>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="floating-menus">
       <!-- 语言切换菜单 -->
@@ -97,13 +116,32 @@ const { locale } = useI18n()
 const showFirstCard = ref(false)
 const showSecondCard = ref(false)
 
+// 卡片容器引用
+const cardsContainerRef = ref(null)
+
 // 卡片引用
 const firstCardRef = ref(null)
 const secondCardRef = ref(null)
 
-// 卡片旋转状态
-const firstCardRotate = ref({ x: 0, y: 0 })
-const secondCardRotate = ref({ x: 0, y: 0 })
+// 容器旋转状态
+const containerRotate = ref({ x: 0, y: 0 })
+
+// 传感器倾斜相关状态
+const useSensorTilt = ref(false)
+const hasSensorChanged = ref(false)
+const initialGamma = ref(null)
+const initialBeta = ref(null)
+const initialAlpha = ref(null)
+const isSensorDetecting = ref(false) // 是否正在检测中（前5秒）
+let sensorCheckInterval = null
+
+// 传感器原始数据（用于显示）
+const sensorData = ref({ alpha: 0, beta: 0, gamma: 0 })
+
+// 基准值：纵向平放时 alpha=90, beta=0, gamma=0
+const BASELINE_ALPHA = 90
+const BASELINE_BETA = 0
+const BASELINE_GAMMA = 0
 
 // 主题菜单
 const isMenuOpen = ref(false)
@@ -113,15 +151,10 @@ const menuContainer = ref(null)
 const isLangMenuOpen = ref(false)
 const langMenuContainer = ref(null)
 
-// 计算卡片样式
-const firstCardStyle = computed(() => ({
-  '--rotate-x': `${firstCardRotate.value.x}deg`,
-  '--rotate-y': `${firstCardRotate.value.y}deg`,
-}))
-
-const secondCardStyle = computed(() => ({
-  '--rotate-x': `${secondCardRotate.value.x}deg`,
-  '--rotate-y': `${secondCardRotate.value.y}deg`,
+// 计算容器样式
+const containerStyle = computed(() => ({
+  '--rotate-x': `${containerRotate.value.x}deg`,
+  '--rotate-y': `${containerRotate.value.y}deg`,
 }))
 
 const currentLocale = computed(() => locale.value)
@@ -192,13 +225,15 @@ function handleClickOutside(event) {
   }
 }
 
-// 计算卡片倾斜角度
-function calculateTilt(mouseX, mouseY, cardElement) {
-  const rect = cardElement.getBoundingClientRect()
+// 计算容器的倾斜角度
+function calculateContainerTilt(mouseX, mouseY) {
+  if (!cardsContainerRef.value) return { x: 0, y: 0 }
+
+  const rect = cardsContainerRef.value.getBoundingClientRect()
   const centerX = rect.left + rect.width / 2
   const centerY = rect.top + rect.height / 2
 
-  // 计算鼠标相对于卡片中心的偏移（-1 到 1）
+  // 计算鼠标相对于容器中心的偏移（-1 到 1）
   let percentX = (mouseX - centerX) / (rect.width / 2)
   let percentY = (mouseY - centerY) / (rect.height / 2)
 
@@ -207,9 +242,10 @@ function calculateTilt(mouseX, mouseY, cardElement) {
   percentY = Math.max(-1, Math.min(1, percentY))
 
   // 限制最大倾斜角度为 15 度
+  // 取反使卡片朝向鼠标方向倾斜
   const maxTilt = 15
-  const rotateY = percentX * maxTilt
-  const rotateX = -percentY * maxTilt
+  const rotateY = -percentX * maxTilt
+  const rotateX = percentY * maxTilt
 
   return { x: rotateX, y: rotateY }
 }
@@ -217,30 +253,116 @@ function calculateTilt(mouseX, mouseY, cardElement) {
 // 鼠标移动处理（使用 requestAnimationFrame 节流）
 let rafId = null
 function handleMouseMove(event) {
+  // 如果使用传感器倾斜，则不处理鼠标移动
+  if (useSensorTilt.value) return
   if (rafId) return
-  
+
   rafId = requestAnimationFrame(() => {
-    if (firstCardRef.value) {
-      firstCardRotate.value = calculateTilt(event.clientX, event.clientY, firstCardRef.value)
-    }
-    if (secondCardRef.value) {
-      secondCardRotate.value = calculateTilt(event.clientX, event.clientY, secondCardRef.value)
-    }
+    containerRotate.value = calculateContainerTilt(event.clientX, event.clientY)
     rafId = null
   })
 }
 
 // 鼠标离开页面时重置倾斜
 function handleMouseLeave() {
-  firstCardRotate.value = { x: 0, y: 0 }
-  secondCardRotate.value = { x: 0, y: 0 }
+  containerRotate.value = { x: 0, y: 0 }
+}
+
+// 从传感器值计算倾斜角度（相对于基准值）
+function calculateTiltFromSensor(gamma, beta, alpha) {
+  // 基准值：纵向平放时 alpha=90, beta=0, gamma=0
+  // 计算相对于基准值的偏移
+  const relativeGamma = gamma - BASELINE_GAMMA
+  const relativeBeta = beta - BASELINE_BETA
+
+  // gamma: -90 (左) 到 90 (右)，映射到 rotateY: -15 到 15
+  // beta: -180 到 180，通常设备使用时在 -45 到 45 之间，映射到 rotateX: -15 到 15
+  const maxTilt = 15
+
+  // 限制相对 beta 范围在 -45 到 45 之间（正常使用范围）
+  const clampedBeta = Math.max(-45, Math.min(45, relativeBeta))
+
+  const rotateY = (relativeGamma / 90) * maxTilt
+  const rotateX = -(clampedBeta / 45) * maxTilt
+
+  return { x: rotateX, y: rotateY }
+}
+
+// 传感器事件处理
+function handleDeviceOrientation(event) {
+  if (event.gamma !== null && event.beta !== null) {
+    containerRotate.value = calculateTiltFromSensor(event.gamma, event.beta)
+  }
+}
+
+// 启动传感器检测
+function startSensorDetection() {
+  // 标记正在检测中，此时显示传感器数据
+  isSensorDetecting.value = true
+
+  // 事件处理器，用于保存数据、检测变化和实时倾斜
+  function detectionHandler(event) {
+    if (event.gamma !== null && event.beta !== null) {
+      // 保存原始传感器数据用于显示
+      sensorData.value = {
+        alpha: event.alpha || 0,
+        beta: event.beta,
+        gamma: event.gamma
+      }
+
+      // 记录初始值并检测变化（相对于基准值的变化）
+      if (initialGamma.value === null) {
+        initialGamma.value = event.gamma
+        initialBeta.value = event.beta
+        initialAlpha.value = event.alpha || 0
+      } else if (!hasSensorChanged.value && !useSensorTilt.value) {
+        // 计算相对于基准值的当前读数
+        const relativeGamma = event.gamma - BASELINE_GAMMA
+        const relativeBeta = event.beta - BASELINE_BETA
+        const initialRelativeGamma = initialGamma.value - BASELINE_GAMMA
+        const initialRelativeBeta = initialBeta.value - BASELINE_BETA
+
+        // 检测相对于基准值的变化阈值（> 2度视为有变化）
+        const gammaDiff = Math.abs(relativeGamma - initialRelativeGamma)
+        const betaDiff = Math.abs(relativeBeta - initialRelativeBeta)
+        if (gammaDiff > 2 || betaDiff > 2) {
+          hasSensorChanged.value = true
+          // 直接激活传感器倾斜模式
+          useSensorTilt.value = true
+          // 移除鼠标事件监听
+          document.removeEventListener('mousemove', handleMouseMove)
+          document.removeEventListener('mouseleave', handleMouseLeave)
+        }
+      }
+
+      // 如果已激活传感器模式，实时更新倾斜（相对于基准值）
+      if (useSensorTilt.value) {
+        containerRotate.value = calculateTiltFromSensor(event.gamma, event.beta, event.alpha)
+      }
+    }
+  }
+
+  // 添加监听，持续保存和显示数据
+  window.addEventListener('deviceorientation', detectionHandler)
+
+  // 5秒后停止检测状态，但不移除事件监听
+  setTimeout(() => {
+    isSensorDetecting.value = false
+    // 如果5秒后仍未激活传感器模式，说明无变化
+    if (!useSensorTilt.value) {
+      useSensorTilt.value = false
+    }
+  }, 5000)
 }
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
   document.addEventListener('mousemove', handleMouseMove)
   document.addEventListener('mouseleave', handleMouseLeave)
-  
+
+  // 启动传感器检测（5秒内检测传感器是否可用）
+  startSensorDetection()
+
   // 触发卡片跃出动画
   setTimeout(() => {
     showFirstCard.value = true
@@ -254,6 +376,13 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('mouseleave', handleMouseLeave)
+
+  // 清理传感器相关监听和定时器
+  window.removeEventListener('deviceorientation', handleDeviceOrientation)
+  if (sensorCheckInterval) {
+    clearInterval(sensorCheckInterval)
+  }
+
   if (rafId) {
     cancelAnimationFrame(rafId)
   }
@@ -274,6 +403,15 @@ onUnmounted(() => {
   perspective: 1000px;
 }
 
+.cards-container {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  transition: transform 0.1s ease-out;
+}
+
 .card {
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -290,8 +428,6 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   opacity: 0;
-  transform-style: preserve-3d;
-  will-change: transform;
 }
 
 /* 第一个卡片 - 从中心跃出到偏左上 */
@@ -299,18 +435,19 @@ onUnmounted(() => {
   transform: translate(-50%, -50%) scale(0.3);
   transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
               left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.4s ease;
+              opacity 0.4s ease,
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card-first.animate {
   opacity: 1;
   top: 35%;
   left: 30%;
-  transform: translate(-50%, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  transform: translate(-50%, -50%) scale(1);
   transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
               left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
               opacity 0.4s ease,
-              transform 0.1s ease-out;
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* 第二个卡片 - 从中心跃出到偏右下 */
@@ -318,18 +455,19 @@ onUnmounted(() => {
   transform: translate(-50%, -50%) scale(0.3);
   transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
               left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.4s ease;
+              opacity 0.4s ease,
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card-second.animate {
   opacity: 1;
   top: 65%;
   left: 70%;
-  transform: translate(-50%, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+  transform: translate(-50%, -50%) scale(1);
   transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
               left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
               opacity 0.4s ease,
-              transform 0.1s ease-out;
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card h1 {
@@ -347,6 +485,38 @@ onUnmounted(() => {
   transition: color 0.3s ease;
 }
 
+/* 传感器数据显示样式 */
+.sensor-data {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--primary-bg);
+  border-radius: 0.5rem;
+  border: 1px solid var(--glass-border);
+}
+
+.sensor-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.375rem 0;
+  font-size: 0.875rem;
+}
+
+.sensor-item:not(:last-child) {
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.sensor-label {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.sensor-value {
+  color: var(--primary);
+  font-family: monospace;
+  font-weight: 600;
+}
+
 /* 响应式适配 - 窄屏 */
 @media (max-width: 768px) {
   .home {
@@ -362,14 +532,14 @@ onUnmounted(() => {
   .card-first.animate {
     top: 38%;
     left: 3%;
-    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+    transform: translate(0, -50%) scale(1);
   }
 
   .card-second.animate {
     top: 60%;
     left: auto;
     right: 3%;
-    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+    transform: translate(0, -50%) scale(1);
   }
 
   .card h1 {
@@ -391,14 +561,14 @@ onUnmounted(() => {
   .card-first.animate {
     top: 36%;
     left: 3%;
-    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+    transform: translate(0, -50%) scale(1);
   }
 
   .card-second.animate {
     top: 55%;
     left: auto;
     right: 3%;
-    transform: translate(0, -50%) scale(1) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
+    transform: translate(0, -50%) scale(1);
   }
 
   .card h1 {
