@@ -1,15 +1,15 @@
 import { createI18n } from 'vue-i18n'
-import zh from './locales/zh.json'
+import zhHans from './locales/zh-Hans.json'
 import en from './locales/en.json'
 
 const STORAGE_KEY = 'app-locale'
-const SUPPORTED_LOCALES = ['zh', 'en']
+const SUPPORTED_LOCALES = ['zh-Hans', 'en']
 
 function getBrowserLocale() {
   const browserLang = navigator.language || navigator.userLanguage
   const lang = browserLang.toLowerCase()
   if (lang.startsWith('zh')) {
-    return 'zh'
+    return 'zh-Hans'
   }
   return 'en'
 }
@@ -46,7 +46,7 @@ const i18n = createI18n({
   locale: getInitialLocale(),
   fallbackLocale: 'en',
   messages: {
-    zh,
+    'zh-Hans': zhHans,
     en
   }
 })

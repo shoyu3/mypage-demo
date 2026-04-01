@@ -100,7 +100,7 @@ const colorOptions = [
 
 // 语言选项 - 移除了 icon
 const langOptions = [
-  { value: 'zh', label: '中文' },
+  { value: 'zh-Hans', label: '简体中文' },
   { value: 'en', label: 'English' },
 ]
 
