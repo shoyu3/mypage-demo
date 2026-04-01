@@ -101,16 +101,19 @@ onMounted(() => {
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 1rem;
-  padding: 2rem 2.5rem;
+  padding: 1rem 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
+  max-width: 550px;
   width: 100%;
+  min-height: 200px;
   backdrop-filter: blur(4px);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: absolute;
   top: 50%;
   left: 50%;
   opacity: 0;
+  display: flex;
+  align-items: center;
 }
 
 .card-first {
@@ -138,12 +141,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 1.5rem;
+  width: 100%;
 }
 
 .avatar {
   flex-shrink: 0;
-  width: 5rem;
-  height: 5rem;
+  width: 8rem;
+  height: 8rem;
   border-radius: 50%;
   /* background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); */
   display: flex;
@@ -214,6 +218,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
+  width: 100%;
 }
 
 .tech-section {
@@ -281,17 +286,17 @@ onMounted(() => {
   }
 
   .card {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
     max-width: none;
     width: 75%;
   }
 
   .card-first.animate {
-    transform: translate(calc(-50% - 15%), calc(-50% - 10vh)) scale(1);
+    transform: translate(calc(-50% - 15%), calc(-50% - 15vh)) scale(1);
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 15%), calc(-50% + 10vh)) scale(1);
+    transform: translate(calc(-50% + 15%), calc(-50% + 15vh)) scale(1);
   }
 
   /* 移动端卡片一调整 */
@@ -299,30 +304,30 @@ onMounted(() => {
     gap: 1rem;
   }
 
-  .avatar {
-    width: 4rem;
-    height: 4rem;
-  }
+  /* .avatar {
+    width: 5rem;
+    height: 5rem;
+  } */
 
 
 
   .name {
-    font-size: 1.375rem;
+    font-size: 1.625rem;
   }
 
   .tagline {
-    font-size: 0.75rem;
+    font-size: 0.875rem;
     margin-bottom: 0.75rem;
   }
 
   .social-link {
-    width: 2rem;
-    height: 2rem;
+    width: 2.25rem;
+    height: 2.25rem;
   }
 
   .social-link svg {
-    width: 1rem;
-    height: 1rem;
+    width: 1.125rem;
+    height: 1.125rem;
   }
 
   /* 移动端卡片二调整 */
@@ -331,66 +336,66 @@ onMounted(() => {
   }
 
   .section-title {
-    font-size: 0.875rem;
-  }
-
-  .tech-tag {
-    padding: 0.2rem 0.5rem;
-    font-size: 0.65rem;
-  }
-
-  .stat-value {
     font-size: 1rem;
   }
 
+  .tech-tag {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  .stat-value {
+    font-size: 1.25rem;
+  }
+
   .stat-label {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 1.25rem;
+    padding: 1.75rem 1.25rem;
     width: 85%;
   }
 
   .card-first.animate {
-    transform: translate(calc(-50% - 5%), calc(-50% - 8vh)) scale(1);
+    transform: translate(calc(-50% - 5%), calc(-50% - 13vh)) scale(1);
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 5%), calc(-50% + 8vh)) scale(1);
+    transform: translate(calc(-50% + 5%), calc(-50% + 13vh)) scale(1);
   }
 
-  .avatar {
+  /* .avatar {
     width: 3.5rem;
     height: 3.5rem;
-  }
+  } */
 
 
 
   .name {
-    font-size: 1.125rem;
+    font-size: 1.375rem;
   }
 
   .tagline {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     margin-bottom: 0.625rem;
   }
 
   .social-link {
-    width: 1.75rem;
-    height: 1.75rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 0.375rem;
   }
 
   .social-link svg {
-    width: 0.875rem;
-    height: 0.875rem;
+    width: 1rem;
+    height: 1rem;
   }
 
   .section-title {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     margin-bottom: 0.5rem;
   }
 
@@ -399,8 +404,8 @@ onMounted(() => {
   }
 
   .tech-tag {
-    padding: 0.15rem 0.4rem;
-    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.7rem;
   }
 
   .stats-section {
@@ -408,11 +413,11 @@ onMounted(() => {
   }
 
   .stat-value {
-    font-size: 0.875rem;
+    font-size: 1.125rem;
   }
 
   .stat-label {
-    font-size: 0.55rem;
+    font-size: 0.65rem;
   }
 }
 </style>
