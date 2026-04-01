@@ -21,7 +21,7 @@
         <h1>{{ $t('home.title1') }}</h1>
         <p>{{ $t('home.content1') }}</p>
         <!-- 传感器数据显示（检测中或启用传感器模式时显示） -->
-        <div v-if="isSensorDetecting || useSensorTilt" class="sensor-data">
+        <!-- <div v-if="isSensorDetecting || useSensorTilt" class="sensor-data">
           <div class="sensor-item">
             <span class="sensor-label">Gamma:</span>
             <span class="sensor-value">{{ sensorData.gamma.toFixed(1) }}°</span>
@@ -34,7 +34,7 @@
             <span class="sensor-label">Alpha:</span>
             <span class="sensor-value">{{ sensorData.alpha.toFixed(1) }}°</span>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="floating-menus">
@@ -391,7 +391,8 @@ onUnmounted(() => {
 
 <style scoped>
 .home {
-  min-height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -421,8 +422,8 @@ onUnmounted(() => {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   max-width: 500px;
   width: 100%;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: absolute;
   top: 50%;
@@ -430,43 +431,35 @@ onUnmounted(() => {
   opacity: 0;
 }
 
-/* 第一个卡片 - 从中心跃出到偏左上 */
+/* 第一个卡片 - 从中心跃出到上方偏左 10% */
 .card-first {
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%) scale(0.3);
-  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.4s ease,
+  transition: opacity 0.4s ease,
               transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card-first.animate {
   opacity: 1;
-  top: 35%;
-  left: 30%;
-  transform: translate(-50%, -50%) scale(1);
-  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.4s ease,
+  transform: translate(calc(-50% - 10vw), calc(-50% - 15vh)) scale(1);
+  transition: opacity 0.4s ease,
               transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* 第二个卡片 - 从中心跃出到偏右下 */
+/* 第二个卡片 - 从中心跃出到下方偏右 10% */
 .card-second {
+  top: 50%;
+  left: 50%;
   transform: translate(-50%, -50%) scale(0.3);
-  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.4s ease,
+  transition: opacity 0.4s ease,
               transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .card-second.animate {
   opacity: 1;
-  top: 65%;
-  left: 70%;
-  transform: translate(-50%, -50%) scale(1);
-  transition: top 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              opacity 0.4s ease,
+  transform: translate(calc(-50% + 10vw), calc(-50% + 15vh)) scale(1);
+  transition: opacity 0.4s ease,
               transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -530,16 +523,11 @@ onUnmounted(() => {
   }
 
   .card-first.animate {
-    top: 38%;
-    left: 3%;
-    transform: translate(0, -50%) scale(1);
+    transform: translate(calc(-50% - 5%), calc(-50% - 15vh)) scale(1);
   }
 
   .card-second.animate {
-    top: 60%;
-    left: auto;
-    right: 3%;
-    transform: translate(0, -50%) scale(1);
+    transform: translate(calc(-50% + 5%), calc(-50% + 15vh)) scale(1);
   }
 
   .card h1 {
@@ -559,16 +547,11 @@ onUnmounted(() => {
   }
 
   .card-first.animate {
-    top: 36%;
-    left: 3%;
-    transform: translate(0, -50%) scale(1);
+    transform: translate(calc(-50% - 5%), calc(-50% - 15vh)) scale(1);
   }
 
   .card-second.animate {
-    top: 55%;
-    left: auto;
-    right: 3%;
-    transform: translate(0, -50%) scale(1);
+    transform: translate(calc(-50% + 5%), calc(-50% + 15vh)) scale(1);
   }
 
   .card h1 {
@@ -603,8 +586,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   cursor: pointer;
   transition: all 0.2s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -630,8 +613,8 @@ onUnmounted(() => {
   border-radius: 0.75rem;
   padding: 0.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   min-width: 140px;
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -646,7 +629,7 @@ onUnmounted(() => {
 
 .menu-divider {
   height: 1px;
-  background-color: var(--glass-border);
+  background-color: var(--border);
   margin: 0.5rem 0;
 }
 
