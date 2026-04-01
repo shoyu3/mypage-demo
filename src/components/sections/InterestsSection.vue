@@ -1,5 +1,5 @@
 <template>
-  <section class="interests-section" id="interests" :style="{ minHeight: viewportHeight + 'px' }">
+  <section class="interests-section" id="interests" style="min-height: 100vh">
     <TiltContainer class="tilt-wrapper">
       <FadeInUp>
         <h2 class="section-title">{{ $t('interests.title') }}</h2>
@@ -36,14 +36,6 @@
         </FadeInUp>
       </div>
     </TiltContainer>
-
-    <!-- Scroll Down Indicator -->
-    <div class="scroll-indicator" @click="$emit('scrollNext')">
-      <span class="scroll-text">{{ $t('home.scrollDown') }}</span>
-      <div class="scroll-arrow">
-        <icon-lucide-chevron-down class="arrow-icon" />
-      </div>
-    </div>
   </section>
 </template>
 
@@ -56,15 +48,6 @@ import IconBook from '~icons/lucide/book-open'
 import IconGamepad from '~icons/lucide/gamepad-2'
 import IconActivity from '~icons/lucide/activity'
 import IconBox from '~icons/lucide/box'
-
-const props = defineProps({
-  viewportHeight: {
-    type: Number,
-    default: window.innerHeight
-  }
-})
-
-defineEmits(['scrollNext'])
 
 const interestKeys = ['music', 'gaming', 'collecting']
 
@@ -281,68 +264,6 @@ const toggleInterest = (key) => {
   }
 }
 
-/* Scroll Indicator */
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  z-index: 10;
-}
-
-.scroll-text {
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: color 0.3s ease;
-}
-
-.scroll-arrow {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.arrow-icon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--primary);
-  animation: bounce 2s infinite;
-}
-
-.scroll-indicator:hover .scroll-text {
-  color: var(--primary);
-}
-
-.scroll-indicator:hover .scroll-arrow {
-  border-color: var(--primary);
-  transform: translateY(2px);
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-6px);
-  }
-  60% {
-    transform: translateY(-3px);
-  }
-}
-
 @media (max-width: 480px) {
   .section-title {
     font-size: 1.75rem;
@@ -350,10 +271,6 @@ const toggleInterest = (key) => {
 
   .card-header {
     gap: 0.75rem;
-  }
-
-  .scroll-indicator {
-    bottom: 1.5rem;
   }
 }
 </style>

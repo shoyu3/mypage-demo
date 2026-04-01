@@ -1,9 +1,9 @@
 <template>
-  <span class="count-up">{{ displayValue }}</span>
+  <span ref="elementRef" class="count-up">{{ displayValue }}</span>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   end: {
@@ -21,19 +21,20 @@ const props = defineProps({
   prefix: {
     type: String,
     default: ''
-  },
-  startOnMount: {
-    type: Boolean,
-    default: false
   }
 })
 
 const emit = defineEmits(['complete'])
 
+const elementRef = ref(null)
 const displayValue = ref(props.prefix + '0' + props.suffix)
+const hasStarted = ref(false)
 let animationId = null
+let observer = null
 
 const animate = () => {
+  if (hasStarted.value) return
+  hasStarted.value = true
   const startTime = performance.now()
   const startValue = 0
 
@@ -61,20 +62,55 @@ const start = () => {
   if (animationId) {
     cancelAnimationFrame(animationId)
   }
+  hasStarted.value = false
   animate()
 }
 
 defineExpose({ start })
 
 onMounted(() => {
-  if (props.startOnMount) {
-    animate()
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasStarted.value) {
+          animate()
+          observer.disconnect()
+        }
+      })
+    },
+    { threshold: 0.1 }
+  )
+
+  if (elementRef.value) {
+    observer.observe(elementRef.value)
+  }
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+    observer = null
+  }
+  if (animationId) {
+    cancelAnimationFrame(animationId)
   }
 })
 
 watch(() => props.end, () => {
-  if (props.startOnMount) {
-    animate()
+  hasStarted.value = false
+  displayValue.value = props.prefix + '0' + props.suffix
+  // 清除之前的动画
+  if (animationId) {
+    cancelAnimationFrame(animationId)
+    animationId = null
+  }
+  // 如果元素已经在视口内，直接开始动画
+  if (elementRef.value) {
+    const rect = elementRef.value.getBoundingClientRect()
+    const isInViewport = rect.top < window.innerHeight && rect.bottom > 0
+    if (isInViewport) {
+      animate()
+    }
   }
 })
 </script>

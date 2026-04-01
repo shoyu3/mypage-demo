@@ -1,5 +1,5 @@
 <template>
-  <section class="character-section" id="character" :style="{ minHeight: viewportHeight + 'px' }">
+  <section class="character-section" id="character" style="min-height: 100vh">
     <TiltContainer class="tilt-wrapper">
       <GlowCard class="character-card">
         <div class="card-inner">
@@ -27,10 +27,10 @@
             </div>
             <div class="basic-info">
               <div class="info-item">
-                <span class="info-label">{{ $t('character.race') }}</span>
+                <span class="info-label">{{ $t('character.race') }}: {{ $t('character.raceValue') }}</span>
               </div>
               <div class="info-item">
-                <span class="info-label">{{ $t('character.origin') }}</span>
+                <span class="info-label">{{ $t('character.origin') }}: {{ $t('character.originValue') }}</span>
               </div>
             </div>
           </div>
@@ -45,10 +45,10 @@
 
           <div class="basic-info basic-info-desktop">
             <div class="info-item">
-              <span class="info-label">{{ $t('character.race') }}</span>
+              <span class="info-label">{{ $t('character.race') }}: {{ $t('character.raceValue') }}</span>
             </div>
             <div class="info-item">
-              <span class="info-label">{{ $t('character.origin') }}</span>
+              <span class="info-label">{{ $t('character.origin') }}: {{ $t('character.originValue') }}</span>
             </div>
           </div>
 
@@ -71,8 +71,13 @@
             </div>
           </div>
 
-          <div class="likes-section">
+          <div class="catchphrase-section">
             <h3 class="section-label">{{ $t('character.catchphrase') }}</h3>
+            <p class="catchphrase-text">{{ $t('character.catchphraseValue') }}</p>
+          </div>
+
+          <div class="likes-section">
+            <h3 class="section-label">{{ $t('character.likesLabel') }}</h3>
             <div class="likes-tags">
               <span v-for="(like, index) in likes" :key="index" class="like-tag">
                 {{ like }}
@@ -95,14 +100,7 @@ import GlowCard from '@/components/ui/GlowCard.vue'
 import CountUp from '@/components/ui/CountUp.vue'
 import TiltContainer from '@/components/TiltContainer.vue'
 
-const props = defineProps({
-  viewportHeight: {
-    type: Number,
-    default: window.innerHeight
-  }
-})
-
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 const traits = computed(() => t('character.traits').split(','))
 const likes = computed(() => t('character.likes').split(','))
@@ -321,6 +319,17 @@ const statValues = {
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+.catchphrase-section {
+  margin-top: 0.5rem;
+}
+
+.catchphrase-text {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--foreground);
+  line-height: 1.6;
 }
 
 .likes-tags {

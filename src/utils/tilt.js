@@ -51,8 +51,8 @@ export function calculateTiltFromSensor(gamma, beta, _alpha) {
   // 限制相对 beta 范围在 -45 到 45 之间（正常使用范围）
   const clampedBeta = Math.max(-45, Math.min(45, relativeBeta))
 
-  const rotateY = (relativeGamma / 90) * MAX_TILT
-  const rotateX = -(clampedBeta / 45) * MAX_TILT
+  const rotateY = -(relativeGamma / 90) * MAX_TILT
+  const rotateX = (clampedBeta / 45) * MAX_TILT
 
   return { x: rotateX, y: rotateY }
 }

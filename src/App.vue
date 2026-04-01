@@ -20,18 +20,12 @@ const isFirstLoad = ref(true)
 provide('isFirstLoad', isFirstLoad)
 
 function onBeforeEnter() {
-  document.body.style.overflow = 'hidden'
 }
 
 function onBeforeLeave() {
-  document.body.style.overflow = 'hidden'
 }
 
 function onAfterEnter() {
-  const delay = isFirstLoad.value ? 1200 : 400
-  setTimeout(() => {
-    document.body.style.overflow = ''
-  }, delay)
   isFirstLoad.value = false
 }
 </script>

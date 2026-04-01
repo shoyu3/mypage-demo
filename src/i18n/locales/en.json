@@ -20,7 +20,7 @@
   },
   "about": {
     "title": "About Me",
-    "story": "Hello, I'm Shoyu, a developer passionate about technology and creation. My curiosity for computers started at a young age, and from the first \"Hello World\", I embarked on this journey full of challenges and surprises.\n\nI believe code is not just a tool, but a way to express creativity. Behind every line of code lies problem-solving thinking and a pursuit of user experience. In the open source community, I found like-minded partners and learned the value of sharing and collaboration.\n\nOutside of work, I enjoy exploring new technologies, reading, gaming, and nurturing that other side of myself in the digital world—Sakuryne.",
+    "story": "Hello, I'm Shoyu, a developer passionate about technology and creation. My curiosity for computers started at a young age, and from the first \"Hello World\", I embarked on this journey full of challenges and surprises.\n\nI believe code is not just a tool, but a way to express creativity. Outside of work, I enjoy exploring new technologies, reading, gaming, and nurturing that other side of myself in the digital world — Sakuryne.",
     "philosophy": "\"Code is poetry, logic is rhythm, creation is freedom.\""
   },
   "interests": {
@@ -47,17 +47,21 @@
     "title": "Character Profile",
     "name": "Sakuryne",
     "subtitle": "// Cyber Spirit",
-    "race": "Digital Lifeform",
-    "origin": "Dimensional rift where code meets cherry blossoms",
-    "traits": ["Pink Gradient", "Glowing Patterns", "Night Owl"],
+    "race": "Race",
+    "raceValue": "Digital Lifeform",
+    "origin": "Origin",
+    "originValue": "Dimensional rift where code meets cherry blossoms",
+    "traits": "Pink Gradient,Glowing Patterns,Night Owl",
     "stats": {
       "creativity": "Creativity",
       "coding": "Coding",
       "nightOwl": "Night Owl Index",
       "bugCollection": "Bug Collection"
     },
-    "likes": ["Late Night Coding", "Matcha Latte", "Perfect Code", "Cherry Blossoms", "Electronic Music"],
-    "catchphrase": "Just one more version...",
+    "likes": "Late Night Coding,Matcha Latte,Perfect Code,Cherry Blossoms,Electronic Music",
+    "likesLabel": "Likes",
+    "catchphrase": "Catchphrase",
+    "catchphraseValue": "Just one more version...",
     "description": "Born from a dimensional fluctuation during a late-night debugging session, Sakuryne is Shoyu's other side in the digital world. Playful but focused when working, loves dancing in the glow of the IDE at midnight."
   },
   "stories": {

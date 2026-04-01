@@ -1,11 +1,11 @@
 <template>
-  <span class="type-writer">
+  <span ref="elementRef" class="type-writer">
     {{ displayText }}<span class="cursor" :class="{ 'blink': showCursor && isTyping }">|</span>
   </span>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 
 const props = defineProps({
   text: {
@@ -23,20 +23,21 @@ const props = defineProps({
   showCursor: {
     type: Boolean,
     default: true
-  },
-  startOnMount: {
-    type: Boolean,
-    default: false
   }
 })
 
 const emit = defineEmits(['complete'])
 
+const elementRef = ref(null)
 const displayText = ref('')
 const isTyping = ref(false)
+const hasStarted = ref(false)
 let timeoutId = null
+let observer = null
 
 const type = () => {
+  if (hasStarted.value) return
+  hasStarted.value = true
   isTyping.value = true
   displayText.value = ''
   let index = 0
@@ -59,20 +60,56 @@ const start = () => {
   if (timeoutId) {
     clearTimeout(timeoutId)
   }
+  hasStarted.value = false
   type()
 }
 
 defineExpose({ start })
 
 onMounted(() => {
-  if (props.startOnMount) {
-    type()
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasStarted.value) {
+          type()
+          observer.disconnect()
+        }
+      })
+    },
+    { threshold: 0.1 }
+  )
+
+  if (elementRef.value) {
+    observer.observe(elementRef.value)
+  }
+})
+
+onUnmounted(() => {
+  if (observer) {
+    observer.disconnect()
+    observer = null
+  }
+  if (timeoutId) {
+    clearTimeout(timeoutId)
   }
 })
 
 watch(() => props.text, () => {
-  if (props.startOnMount) {
-    type()
+  hasStarted.value = false
+  displayText.value = ''
+  isTyping.value = false
+  // 清除之前的 timeout
+  if (timeoutId) {
+    clearTimeout(timeoutId)
+    timeoutId = null
+  }
+  // 如果元素已经在视口内，直接开始打字
+  if (elementRef.value) {
+    const rect = elementRef.value.getBoundingClientRect()
+    const isInViewport = rect.top < window.innerHeight && rect.bottom > 0
+    if (isInViewport) {
+      type()
+    }
   }
 })
 </script>

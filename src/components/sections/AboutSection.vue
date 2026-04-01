@@ -1,5 +1,5 @@
 <template>
-  <section class="about-section" id="about" :style="{ minHeight: viewportHeight + 'px' }">
+  <section class="about-section" id="about" style="min-height: 100vh">
     <TiltContainer class="tilt-wrapper">
       <div class="container">
         <FadeInUp direction="left" class="content-wrapper">
@@ -41,13 +41,7 @@
       </FadeInUp>
     </TiltContainer>
 
-    <!-- Scroll Down Indicator -->
-    <div class="scroll-indicator" @click="$emit('scrollNext')">
-      <span class="scroll-text">{{ $t('home.scrollDown') }}</span>
-      <div class="scroll-arrow">
-        <icon-lucide-chevron-down class="arrow-icon" />
-      </div>
-    </div>
+
   </section>
 </template>
 
@@ -58,14 +52,7 @@ import FadeInUp from '@/components/ui/FadeInUp.vue'
 import TypeWriter from '@/components/ui/TypeWriter.vue'
 import TiltContainer from '@/components/TiltContainer.vue'
 
-const props = defineProps({
-  viewportHeight: {
-    type: Number,
-    default: window.innerHeight
-  }
-})
 
-defineEmits(['scrollNext'])
 
 const { t } = useI18n()
 
@@ -274,67 +261,7 @@ const storyParagraphs = computed(() => {
   }
 }
 
-/* Scroll Indicator */
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  z-index: 10;
-}
 
-.scroll-text {
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: color 0.3s ease;
-}
-
-.scroll-arrow {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.arrow-icon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--primary);
-  animation: bounce 2s infinite;
-}
-
-.scroll-indicator:hover .scroll-text {
-  color: var(--primary);
-}
-
-.scroll-indicator:hover .scroll-arrow {
-  border-color: var(--primary);
-  transform: translateY(2px);
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-6px);
-  }
-  60% {
-    transform: translateY(-3px);
-  }
-}
 
 @media (max-width: 480px) {
   .about-section {
@@ -357,8 +284,6 @@ const storyParagraphs = computed(() => {
     font-size: 1.1rem;
   }
 
-  .scroll-indicator {
-    bottom: 1.5rem;
-  }
+
 }
 </style>

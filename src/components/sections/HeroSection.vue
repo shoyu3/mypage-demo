@@ -1,5 +1,5 @@
 <template>
-  <section class="hero-section" id="hero" :style="{ height: viewportHeight + 'px' }">
+  <section class="hero-section" id="hero" style="min-height: 100vh">
     <TiltContainer class="cards-wrapper">
       <div
         class="card card-first"
@@ -47,28 +47,12 @@
         </div>
       </div>
     </TiltContainer>
-
-    <div class="scroll-indicator" @click="$emit('scrollNext')">
-      <span class="scroll-text">{{ $t('home.scrollDown') }}</span>
-      <div class="scroll-arrow">
-        <icon-lucide-chevron-down class="arrow-icon" />
-      </div>
-    </div>
   </section>
 </template>
 
 <script setup>
 import { ref, inject, onMounted } from 'vue'
 import TiltContainer from '@/components/TiltContainer.vue'
-
-const props = defineProps({
-  viewportHeight: {
-    type: Number,
-    default: window.innerHeight
-  }
-})
-
-defineEmits(['scrollNext'])
 
 const isFirstLoad = inject('isFirstLoad')
 const showFirstCard = ref(false)
@@ -282,80 +266,6 @@ onMounted(() => {
   margin-top: 0.125rem;
 }
 
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  opacity: 0;
-  animation: fade-in-up 0.6s ease 1.5s forwards;
-  z-index: 10;
-}
-
-.scroll-text {
-  font-size: 0.75rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transition: color 0.3s ease;
-}
-
-.scroll-arrow {
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background-color: var(--glass-bg);
-  border: 1px solid var(--glass-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.arrow-icon {
-  width: 1rem;
-  height: 1rem;
-  color: var(--primary);
-  animation: bounce 2s infinite;
-}
-
-.scroll-indicator:hover .scroll-text {
-  color: var(--primary);
-}
-
-.scroll-indicator:hover .scroll-arrow {
-  border-color: var(--primary);
-  transform: translateY(2px);
-}
-
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-6px);
-  }
-  60% {
-    transform: translateY(-3px);
-  }
-}
-
 @media (max-width: 768px) {
   .hero-section {
     padding: 1rem;
@@ -368,11 +278,11 @@ onMounted(() => {
   }
 
   .card-first.animate {
-    transform: translate(calc(-50% - 15%), calc(-50% - 15vh)) scale(1);
+    transform: translate(calc(-50% - 15%), calc(-50% - 22vh)) scale(1);
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 15%), calc(-50% + 15vh)) scale(1);
+    transform: translate(calc(-50% + 15%), calc(-50% + 4vh)) scale(1);
   }
 
   .card-first .card-content {
@@ -423,10 +333,6 @@ onMounted(() => {
   .stat-label {
     font-size: 0.7rem;
   }
-
-  .scroll-indicator {
-    bottom: 1.5rem;
-  }
 }
 
 @media (max-width: 480px) {
@@ -436,11 +342,11 @@ onMounted(() => {
   }
 
   .card-first.animate {
-    transform: translate(calc(-50% - 5%), calc(-50% - 13vh)) scale(1);
+    transform: translate(calc(-50% - 5%), calc(-50% - 20vh)) scale(1);
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 5%), calc(-50% + 13vh)) scale(1);
+    transform: translate(calc(-50% + 5%), calc(-50% + 2vh)) scale(1);
   }
 
   .avatar {

@@ -20,7 +20,7 @@
   },
   "about": {
     "title": "关于我",
-    "story": "你好，我是 Shoyu，一个热爱技术与创造的开发者。从小对计算机充满好奇，从的第一行 \"Hello World\" 开始，便踏上了这条充满挑战与惊喜的编程之路。\n\n我相信代码不仅是工具，更是表达创意的方式。工作之余，我喜欢探索新技术、阅读、游戏，以及培养那个在数字世界中陪伴我的另一个自己——Sakuryne。",
+    "story": "你好，我是 芍芋 (Shoyu)，是一个热爱技术与创造的开发者。从小对计算机充满好奇，从第一行 \"Hello World\" 开始，便踏上了这条充满挑战与惊喜的编程之路。\n\n我相信代码不仅是工具，更是表达创意的方式。工作之余，我喜欢探索新技术、阅读、游戏，以及培养那个在数字世界中陪伴我的另一个自己——樱瓴。",
     "philosophy": "\"代码如诗，逻辑为韵，创造即自由。\""
   },
   "interests": {
@@ -45,26 +45,30 @@
   },
   "character": {
     "title": "人设档案",
-    "name": "Sakuryne",
+    "name": "樱瓴",
     "subtitle": "// 赛博精灵",
-    "race": "数字生命体",
-    "origin": "代码与樱花交织的次元裂缝",
-    "traits": ["粉色渐变", "发光纹路", "夜猫子"],
+    "race": "种族",
+    "raceValue": "数字生命体",
+    "origin": "起源",
+    "originValue": "代码与樱花交织的次元裂缝",
+    "traits": "粉色渐变,发光纹路,夜猫子",
     "stats": {
       "creativity": "创意",
       "coding": "编程",
       "nightOwl": "夜猫子指数",
       "bugCollection": "Bug 收集"
     },
-    "likes": ["深夜编程", "抹茶拿铁", "完美代码", "樱花", "电子音乐"],
-    "catchphrase": "再改最后一个版本...",
+    "likes": "深夜编程,抹茶拿铁,完美代码,樱花,电子音乐",
+    "likesLabel": "喜好",
+    "catchphrase": "口头禅",
+    "catchphraseValue": "再改最后一个版本...",
     "description": "诞生于某次深夜调试时的次元波动，是 Shoyu 在数字世界的另一面。性格活泼但工作时专注，喜欢在深夜的 IDE 光芒中跳舞。"
   },
   "stories": {
     "title": "小剧场",
     "dialogues": [
       {
-        "speaker": "Sakuryne",
+        "speaker": "樱瓴",
         "avatar": "character",
         "text": "主人主人，这个 bug 看起来好像一只小兔子！",
         "time": "02:30"
@@ -76,13 +80,13 @@
         "time": "02:31"
       },
       {
-        "speaker": "Sakuryne",
+        "speaker": "樱瓴",
         "avatar": "character",
         "text": "收到！抹茶拿铁加双倍浓缩，程序员特调~",
         "time": "02:32"
       },
       {
-        "speaker": "Sakuryne",
+        "speaker": "樱瓴",
         "avatar": "character",
         "text": "主人，为什么人类总是说'再改最后一个版本'然后通宵呢？",
         "time": "04:15"
@@ -94,7 +98,7 @@
         "time": "04:16"
       },
       {
-        "speaker": "Sakuryne",
+        "speaker": "樱瓴",
         "avatar": "character",
         "text": "我懂！就像我说'再刷最后一个视频'然后天亮了一样！",
         "time": "04:17"

@@ -3,19 +3,19 @@
     <!-- 固定背景层 -->
     <div class="fixed-background"></div>
 
-    <!-- 内容层 - 通过 transform 切换 -->
-    <div class="content-wrapper" :style="contentStyle">
+    <!-- 内容层 -->
+    <div class="content-wrapper">
       <!-- Hero Section -->
-      <HeroSection @scrollNext="scrollToNextSection" :viewport-height="viewportHeight" />
+      <HeroSection ref="heroSection" :style="{ opacity: sectionOpacities.hero }" />
 
       <!-- About Section -->
-      <AboutSection @scrollNext="scrollToNextSection" :viewport-height="viewportHeight" />
+      <AboutSection ref="aboutSection" :style="{ opacity: sectionOpacities.about }" />
 
       <!-- Interests Section -->
-      <InterestsSection @scrollNext="scrollToNextSection" :viewport-height="viewportHeight" />
+      <InterestsSection ref="interestsSection" :style="{ opacity: sectionOpacities.interests }" />
  
       <!-- Character Card Section -->
-      <CharacterCard :viewport-height="viewportHeight" />
+      <CharacterCard ref="characterSection" :style="{ opacity: sectionOpacities.character }" />
     </div>
 
     <FloatingControls />
@@ -23,107 +23,65 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import HeroSection from '@/components/sections/HeroSection.vue'
 import FloatingControls from '@/components/FloatingControls.vue'
 import AboutSection from '@/components/sections/AboutSection.vue'
 import InterestsSection from '@/components/sections/InterestsSection.vue'
 import CharacterCard from '@/components/sections/CharacterCard.vue'
 
-const sections = ['hero', 'about', 'interests', 'character']
-const currentSectionIndex = ref(0)
-let isScrolling = false
+const heroSection = ref(null)
+const aboutSection = ref(null)
+const interestsSection = ref(null)
+const characterSection = ref(null)
 
-const viewportHeight = ref(window.innerHeight)
-
-function updateViewportHeight() {
-  viewportHeight.value = window.innerHeight
-}
-
-const contentStyle = computed(() => {
-  return {
-    transform: `translateY(-${currentSectionIndex.value * viewportHeight.value}px)`,
-    transition: isScrolling ? 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
-  }
+const sectionOpacities = reactive({
+  hero: 1,
+  about: 1,
+  interests: 1,
+  character: 1
 })
 
-let touchStartY = 0
-let touchEndY = 0
-const minSwipeDistance = 50
+function updateOpacities() {
+  const sections = [
+    { name: 'hero', el: heroSection.value?.$el || heroSection.value },
+    { name: 'about', el: aboutSection.value?.$el || aboutSection.value },
+    { name: 'interests', el: interestsSection.value?.$el || interestsSection.value },
+    { name: 'character', el: characterSection.value?.$el || characterSection.value }
+  ]
+
+  const viewportCenter = window.innerHeight / 2
+
+  sections.forEach(({ name, el }) => {
+    if (!el) return
+
+    const rect = el.getBoundingClientRect()
+    const sectionCenter = rect.top + rect.height / 2
+    const distance = Math.abs(sectionCenter - viewportCenter)
+    const maxDistance = window.innerHeight
+
+    let opacity = 1 - (distance / maxDistance)
+    opacity = Math.max(0, Math.min(1, opacity))
+
+    sectionOpacities[name] = opacity
+  })
+}
 
 onMounted(() => {
-  window.addEventListener('wheel', handleWheel, { passive: false })
-  window.addEventListener('touchstart', handleTouchStart, { passive: false })
-  window.addEventListener('touchend', handleTouchEnd, { passive: false })
-  window.addEventListener('resize', updateViewportHeight)
+  window.addEventListener('scroll', updateOpacities)
+  updateOpacities()
 })
 
 onUnmounted(() => {
-  window.removeEventListener('wheel', handleWheel)
-  window.removeEventListener('touchstart', handleTouchStart)
-  window.removeEventListener('touchend', handleTouchEnd)
-  window.removeEventListener('resize', updateViewportHeight)
+  window.removeEventListener('scroll', updateOpacities)
 })
-
-function handleWheel(event) {
-  event.preventDefault()
-
-  if (isScrolling) return
-
-  const delta = event.deltaY
-
-  if (delta > 0) {
-    scrollToNextSection()
-  } else if (delta < 0) {
-    scrollToPrevSection()
-  }
-}
-
-function handleTouchStart(event) {
-  touchStartY = event.touches[0].clientY
-}
-
-function handleTouchEnd(event) {
-  if (isScrolling) return
-  
-  touchEndY = event.changedTouches[0].clientY
-  const swipeDistance = touchStartY - touchEndY
-  
-  if (swipeDistance > minSwipeDistance) {
-    scrollToNextSection()
-  }
-  else if (swipeDistance < -minSwipeDistance) {
-    scrollToPrevSection()
-  }
-}
-
-function scrollToNextSection() {
-  if (currentSectionIndex.value < sections.length - 1) {
-    isScrolling = true
-    currentSectionIndex.value++
-    setTimeout(() => {
-      isScrolling = false
-    }, 800)
-  }
-}
-
-function scrollToPrevSection() {
-  if (currentSectionIndex.value > 0) {
-    isScrolling = true
-    currentSectionIndex.value--
-    setTimeout(() => {
-      isScrolling = false
-    }, 800)
-  }
-}
 </script>
 
 <style scoped>
 .home {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   position: relative;
-  overflow: hidden;
 }
 
 .fixed-background {
@@ -140,6 +98,5 @@ function scrollToPrevSection() {
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 100%;
 }
 </style>
