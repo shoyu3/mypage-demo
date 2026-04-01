@@ -18,16 +18,31 @@
               {{ trait }}
             </span>
           </div>
+          <!-- 窄屏下显示在右侧的 name 和 basic-info -->
+          <div class="name-basic-mobile">
+            <div class="name-section">
+              <h2 class="character-name">{{ $t('character.name') }}</h2>
+              <span class="character-subtitle">{{ $t('character.subtitle') }}</span>
+            </div>
+            <div class="basic-info">
+              <div class="info-item">
+                <span class="info-label">{{ $t('character.race') }}</span>
+              </div>
+              <div class="info-item">
+                <span class="info-label">{{ $t('character.origin') }}</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- 右侧：信息区域 -->
         <div class="character-info">
-          <div class="name-section">
+          <div class="name-section name-section-desktop">
             <h2 class="character-name">{{ $t('character.name') }}</h2>
             <span class="character-subtitle">{{ $t('character.subtitle') }}</span>
           </div>
 
-          <div class="basic-info">
+          <div class="basic-info basic-info-desktop">
             <div class="info-item">
               <span class="info-label">{{ $t('character.race') }}</span>
             </div>
@@ -100,11 +115,13 @@ const statValues = {
 
 <style scoped>
 .character-section {
-  padding: 6rem 1.5rem;
+  padding: 4rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .character-card {
@@ -326,10 +343,15 @@ const statValues = {
   border-top: 1px solid var(--glass-border);
 }
 
+/* 默认隐藏移动端布局 */
+.name-basic-mobile {
+  display: none;
+}
+
 /* 响应式 */
 @media (max-width: 768px) {
   .character-section {
-    padding: 4rem 1rem;
+    padding: 3rem 1rem;
   }
 
   .card-inner {
@@ -337,23 +359,59 @@ const statValues = {
     gap: 2rem;
   }
 
+  /* 顶部区域：立绘居左，name和basic-info居右 */
+  .character-visual {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
   .character-avatar {
-    width: 180px;
-    height: 180px;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+  }
+
+  .floating-traits {
+    display: none;
+  }
+
+  /* 显示移动端布局 */
+  .name-basic-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* 隐藏桌面端 name 和 basic-info */
+  .name-section-desktop,
+  .basic-info-desktop {
+    display: none;
+  }
+
+  .character-info {
+    gap: 1rem;
   }
 
   .character-name {
-    font-size: 2rem;
-    text-align: center;
+    font-size: 1.75rem;
+    text-align: left;
   }
 
   .character-subtitle {
     display: block;
-    text-align: center;
+    text-align: left;
+    font-size: 0.875rem;
   }
 
   .basic-info {
-    align-items: center;
+    align-items: flex-start;
+    gap: 0.375rem;
+  }
+
+  .info-item {
+    font-size: 0.8rem;
   }
 
   .character-desc {
@@ -362,13 +420,25 @@ const statValues = {
 }
 
 @media (max-width: 480px) {
+  .character-visual {
+    gap: 1rem;
+  }
+
   .character-avatar {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
   }
 
   .character-name {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+  }
+
+  .character-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .info-item {
+    font-size: 0.75rem;
   }
 
   .trait-tag {

@@ -84,11 +84,13 @@ const toggleInterest = (key) => {
 
 <style scoped>
 .interests-section {
-  padding: 6rem 1.5rem;
+  padding: 4rem 1.5rem 6rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .section-title {
@@ -235,7 +237,7 @@ const toggleInterest = (key) => {
 
 @media (max-width: 768px) {
   .interests-section {
-    padding: 4rem 1rem;
+    padding: 3rem 1rem 5rem;
   }
 
   .section-title {

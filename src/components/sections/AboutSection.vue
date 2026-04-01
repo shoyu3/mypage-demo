@@ -74,12 +74,13 @@ const storyParagraphs = computed(() => {
 
 <style scoped>
 .about-section {
-  padding: 6rem 1.5rem;
+  padding: 4rem 1.5rem 6rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .about-section::before {
@@ -327,7 +328,7 @@ const storyParagraphs = computed(() => {
 
 @media (max-width: 480px) {
   .about-section {
-    padding: 4rem 1rem;
+    padding: 3rem 1rem 5rem;
   }
 
   .section-title {
