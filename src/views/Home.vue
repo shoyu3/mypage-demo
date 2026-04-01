@@ -29,6 +29,12 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import FloatingControls from '@/components/FloatingControls.vue'
+import {
+  calculateContainerTilt,
+  calculateTiltFromSensor,
+  BASELINE_GAMMA,
+  BASELINE_BETA,
+} from '@/utils/tilt.js'
 
 // 卡片动画控制
 const showFirstCard = ref(false)
@@ -52,14 +58,10 @@ const initialBeta = ref(null)
 const initialAlpha = ref(null)
 const isSensorDetecting = ref(false) // 是否正在检测中（前5秒）
 let sensorCheckInterval = null
+let detectionHandlerRef = null
 
 // 传感器原始数据（用于显示）
 const sensorData = ref({ alpha: 0, beta: 0, gamma: 0 })
-
-// 基准值：纵向平放时 alpha=90, beta=0, gamma=0
-const BASELINE_ALPHA = 90
-const BASELINE_BETA = 0
-const BASELINE_GAMMA = 0
 
 // 计算容器样式
 const containerStyle = computed(() => ({
@@ -67,40 +69,17 @@ const containerStyle = computed(() => ({
   '--rotate-y': `${containerRotate.value.y}deg`,
 }))
 
-// 计算容器的倾斜角度
-function calculateContainerTilt(mouseX, mouseY) {
-  if (!cardsContainerRef.value) return { x: 0, y: 0 }
-
-  const rect = cardsContainerRef.value.getBoundingClientRect()
-  const centerX = rect.left + rect.width / 2
-  const centerY = rect.top + rect.height / 2
-
-  // 计算鼠标相对于容器中心的偏移（-1 到 1）
-  let percentX = (mouseX - centerX) / (rect.width / 2)
-  let percentY = (mouseY - centerY) / (rect.height / 2)
-
-  // 限制偏移范围在 -1 到 1 之间，防止角度过大
-  percentX = Math.max(-1, Math.min(1, percentX))
-  percentY = Math.max(-1, Math.min(1, percentY))
-
-  // 限制最大倾斜角度为 15 度
-  // 取反使卡片朝向鼠标方向倾斜
-  const maxTilt = 15
-  const rotateY = -percentX * maxTilt
-  const rotateX = percentY * maxTilt
-
-  return { x: rotateX, y: rotateY }
-}
-
 // 鼠标移动处理（使用 requestAnimationFrame 节流）
 let rafId = null
 function handleMouseMove(event) {
   // 如果使用传感器倾斜，则不处理鼠标移动
   if (useSensorTilt.value) return
   if (rafId) return
+  if (!cardsContainerRef.value) return
 
   rafId = requestAnimationFrame(() => {
-    containerRotate.value = calculateContainerTilt(event.clientX, event.clientY)
+    const rect = cardsContainerRef.value.getBoundingClientRect()
+    containerRotate.value = calculateContainerTilt(event.clientX, event.clientY, rect)
     rafId = null
   })
 }
@@ -110,40 +89,13 @@ function handleMouseLeave() {
   containerRotate.value = { x: 0, y: 0 }
 }
 
-// 从传感器值计算倾斜角度（相对于基准值）
-function calculateTiltFromSensor(gamma, beta, alpha) {
-  // 基准值：纵向平放时 alpha=90, beta=0, gamma=0
-  // 计算相对于基准值的偏移
-  const relativeGamma = gamma - BASELINE_GAMMA
-  const relativeBeta = beta - BASELINE_BETA
-
-  // gamma: -90 (左) 到 90 (右)，映射到 rotateY: -15 到 15
-  // beta: -180 到 180，通常设备使用时在 -45 到 45 之间，映射到 rotateX: -15 到 15
-  const maxTilt = 15
-
-  // 限制相对 beta 范围在 -45 到 45 之间（正常使用范围）
-  const clampedBeta = Math.max(-45, Math.min(45, relativeBeta))
-
-  const rotateY = (relativeGamma / 90) * maxTilt
-  const rotateX = -(clampedBeta / 45) * maxTilt
-
-  return { x: rotateX, y: rotateY }
-}
-
-// 传感器事件处理
-function handleDeviceOrientation(event) {
-  if (event.gamma !== null && event.beta !== null) {
-    containerRotate.value = calculateTiltFromSensor(event.gamma, event.beta)
-  }
-}
-
 // 启动传感器检测
 function startSensorDetection() {
   // 标记正在检测中，此时显示传感器数据
   isSensorDetecting.value = true
 
   // 事件处理器，用于保存数据、检测变化和实时倾斜
-  function detectionHandler(event) {
+  detectionHandlerRef = function detectionHandler(event) {
     if (event.gamma !== null && event.beta !== null) {
       // 保存原始传感器数据用于显示
       sensorData.value = {
@@ -185,7 +137,7 @@ function startSensorDetection() {
   }
 
   // 添加监听，持续保存和显示数据
-  window.addEventListener('deviceorientation', detectionHandler)
+  window.addEventListener('deviceorientation', detectionHandlerRef)
 
   // 5秒后停止检测状态，但不移除事件监听
   setTimeout(() => {
@@ -218,7 +170,9 @@ onUnmounted(() => {
   document.removeEventListener('mouseleave', handleMouseLeave)
 
   // 清理传感器相关监听和定时器
-  window.removeEventListener('deviceorientation', handleDeviceOrientation)
+  if (detectionHandlerRef) {
+    window.removeEventListener('deviceorientation', detectionHandlerRef)
+  }
   if (sensorCheckInterval) {
     clearInterval(sensorCheckInterval)
   }
