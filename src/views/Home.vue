@@ -49,7 +49,7 @@ onMounted(() => {
   justify-content: center;
   background: linear-gradient(135deg, var(--background) 0%, var(--primary-bg) 100%);
   padding: 1.5rem;
-  transition: background-color 0.3s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
   position: relative;
   overflow: hidden;
   perspective: 1000px;

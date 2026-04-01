@@ -5,7 +5,7 @@
         class="card"
         :class="{ 'animate': showCard }"
       >
-        <div class="error-code">404</div>
+        <icon-lucide-file-question-mark class="error-icon" />
         <h1>{{ $t('notFound.title') }}</h1>
         <p>{{ $t('notFound.description') }}</p>
         <button class="home-button" @click="goHome">
@@ -38,17 +38,7 @@ onMounted(() => {
 
 // 返回首页
 function goHome() {
-  // 添加离开动画类名，等待动画完成后再跳转
-  const card = document.querySelector('.card')
-  if (card) {
-    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease'
-    card.style.opacity = '0'
-    card.style.transform = 'translateY(30px) scale(0.9)'
-  }
-  
-  setTimeout(() => {
-    router.push('/')
-  }, 400)
+  router.push('/')
 }
 </script>
 
@@ -61,7 +51,7 @@ function goHome() {
   justify-content: center;
   background: linear-gradient(135deg, var(--background) 0%, var(--primary-bg) 100%);
   padding: 1.5rem;
-  transition: background-color 0.3s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
   position: relative;
   overflow: hidden;
   perspective: 1000px;
@@ -96,12 +86,12 @@ function goHome() {
   transform: scale(1);
 }
 
-.error-code {
-  font-size: 6rem;
-  font-weight: 700;
+.error-icon {
+  width: 6rem;
+  height: 6rem;
   color: var(--primary);
-  line-height: 1;
-  margin-bottom: 1rem;
+  margin: 0 auto 1rem;
+  display: block;
   opacity: 0.8;
 }
 
@@ -159,8 +149,9 @@ function goHome() {
     width: 80%;
   }
 
-  .error-code {
-    font-size: 4rem;
+  .error-icon {
+    width: 4rem;
+    height: 4rem;
   }
 
   .card h1 {
@@ -178,8 +169,9 @@ function goHome() {
     width: 90%;
   }
 
-  .error-code {
-    font-size: 3.5rem;
+  .error-icon {
+    width: 3.5rem;
+    height: 3.5rem;
   }
 
   .card h1 {

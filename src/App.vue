@@ -1,10 +1,25 @@
 <template>
   <router-view v-slot="{ Component }">
-    <transition name="page" mode="out-in">
+    <transition
+      name="page"
+      mode="out-in"
+      @before-leave="onBeforeLeave"
+      @after-enter="onAfterEnter"
+    >
       <component :is="Component" />
     </transition>
   </router-view>
 </template>
+
+<script setup>
+function onBeforeLeave() {
+  document.body.style.overflow = 'hidden'
+}
+
+function onAfterEnter() {
+  document.body.style.overflow = ''
+}
+</script>
 
 <style>
 /* 页面切换动画 - 原页面向下移动同时淡出 */
