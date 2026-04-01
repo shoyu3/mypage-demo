@@ -31,20 +31,10 @@
         "icon": "music",
         "desc": "Love J-Pop, electronic music, and Lo-Fi. Often listen to Fujii Kaze, YOASOBI, and various game soundtracks while working."
       },
-      "reading": {
-        "title": "Reading",
-        "icon": "book",
-        "desc": "Sci-fi and mystery novel enthusiast. Recently reading \"The Three-Body Problem\" and Keigo Higashino's works. Prefer practical technical books."
-      },
       "gaming": {
         "title": "Gaming",
         "icon": "gamepad",
         "desc": "RPG and indie game player. Favorites include Zelda, Hades, and various pixel art indie games."
-      },
-      "sports": {
-        "title": "Sports",
-        "icon": "activity",
-        "desc": "Occasional running and cycling, enjoy outdoor hiking. Believe programmers also need sunshine and fresh air."
       },
       "collecting": {
         "title": "Collecting",

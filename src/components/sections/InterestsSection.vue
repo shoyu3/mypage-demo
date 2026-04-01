@@ -63,7 +63,7 @@ const props = defineProps({
 
 defineEmits(['scrollNext'])
 
-const interestKeys = ['music', 'reading', 'gaming', 'sports', 'collecting']
+const interestKeys = ['music', 'gaming', 'collecting']
 
 const iconMap = {
   music: IconMusic,
