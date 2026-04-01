@@ -217,7 +217,6 @@ onUnmounted(() => {
   max-width: 500px;
   width: 100%;
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: absolute;
   top: 50%;

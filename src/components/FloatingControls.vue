@@ -94,6 +94,7 @@ const themeOptions = computed(() => [
 const colorOptions = [
   { value: 'purple', label: '紫色', color: '#aa3bff' },
   { value: 'blue', label: '蓝色', color: '#3b82f6' },
+  { value: 'orange', label: '橙色', color: '#f97316' },
   { value: 'green', label: '绿色', color: '#10b981' },
 ]
 
@@ -183,7 +184,6 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   cursor: pointer;
   transition: all 0.2s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -210,7 +210,6 @@ onUnmounted(() => {
   padding: 0.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
   min-width: 140px;
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }

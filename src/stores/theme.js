@@ -30,7 +30,7 @@ export const useThemeStore = defineStore('theme', () => {
 
   // 监听 effectiveMode 变化，自动应用主题
   watch(effectiveMode, (newMode) => {
-    applyTheme(newMode, themeName.value)
+    applyTheme(newMode, themeName.value, mode.value)
   })
 
   // 初始化主题
@@ -38,7 +38,7 @@ export const useThemeStore = defineStore('theme', () => {
     const saved = getSavedTheme()
     mode.value = saved.mode
     themeName.value = saved.themeName
-    applyTheme(effectiveMode.value, themeName.value)
+    applyTheme(effectiveMode.value, themeName.value, mode.value)
   }
 
   // 切换明暗模式（light -> dark -> auto -> light）
@@ -54,7 +54,7 @@ export const useThemeStore = defineStore('theme', () => {
     if (newMode === 'light' || newMode === 'dark' || newMode === 'auto') {
       mode.value = newMode
       localStorage.setItem('theme-mode', newMode)
-      applyTheme(effectiveMode.value, themeName.value)
+      applyTheme(effectiveMode.value, themeName.value, mode.value)
     }
   }
 
@@ -63,7 +63,7 @@ export const useThemeStore = defineStore('theme', () => {
     if (availableThemes.includes(name) || customThemes.value.has(name)) {
       themeName.value = name
       localStorage.setItem('theme-color', name)
-      applyTheme(effectiveMode.value, themeName.value)
+      applyTheme(effectiveMode.value, themeName.value, mode.value)
     }
   }
 
@@ -97,7 +97,7 @@ export const useThemeStore = defineStore('theme', () => {
     const handleChange = () => {
       // 只在 auto 模式下响应系统主题变化
       if (mode.value === 'auto') {
-        applyTheme(getSystemMode(), themeName.value)
+        applyTheme(getSystemMode(), themeName.value, mode.value)
       }
     }
 
@@ -111,7 +111,7 @@ export const useThemeStore = defineStore('theme', () => {
     localStorage.removeItem('theme-color')
     mode.value = 'auto'
     themeName.value = 'purple'
-    applyTheme(getSystemMode(), 'purple')
+    applyTheme(getSystemMode(), 'purple', 'auto')
   }
 
   return {

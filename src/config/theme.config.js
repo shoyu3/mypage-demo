@@ -69,6 +69,21 @@ const themeColors = {
       'primary-border': 'rgba(52, 211, 153, 0.5)',
     },
   },
+  // 橙色主题
+  orange: {
+    light: {
+      primary: '#f97316',
+      'primary-hover': '#ea580c',
+      'primary-bg': 'rgba(249, 115, 22, 0.1)',
+      'primary-border': 'rgba(249, 115, 22, 0.5)',
+    },
+    dark: {
+      primary: '#fb923c',
+      'primary-hover': '#f97316',
+      'primary-bg': 'rgba(251, 146, 60, 0.15)',
+      'primary-border': 'rgba(251, 146, 60, 0.5)',
+    },
+  },
 }
 
 // 生成 CSS 变量的函数
@@ -96,7 +111,8 @@ export function generateCSSVariables(mode, themeName) {
 }
 
 // 应用 CSS 变量到文档
-export function applyTheme(mode, themeName) {
+// userMode: 用户设置的模式（可能是 'auto'），用于保存到 localStorage
+export function applyTheme(mode, themeName, userMode = mode) {
   const variables = generateCSSVariables(mode, themeName)
   const root = document.documentElement
 
@@ -104,12 +120,12 @@ export function applyTheme(mode, themeName) {
     root.style.setProperty(key, value)
   })
 
-  // 设置 data 属性用于 Tailwind 选择器
+  // 设置 data 属性用于 Tailwind 选择器（使用实际生效的模式）
   root.setAttribute('data-mode', mode)
   root.setAttribute('data-theme', themeName)
 
-  // 保存到 localStorage
-  localStorage.setItem('theme-mode', mode)
+  // 保存到 localStorage（保存用户设置的模式，保留 'auto'）
+  localStorage.setItem('theme-mode', userMode)
   localStorage.setItem('theme-color', themeName)
 }
 
@@ -158,4 +174,4 @@ export function registerCustomTheme(themeConfig) {
 
 // 导出配置
 export { baseColors, themeColors }
-export const availableThemes = ['purple', 'blue', 'green']
+export const availableThemes = ['purple', 'blue', 'orange', 'green']
