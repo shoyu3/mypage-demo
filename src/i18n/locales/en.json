@@ -4,10 +4,18 @@
     "about": "About"
   },
   "home": {
-    "title": "Home",
-    "description": "This is the home page",
-    "title1": "Title One",
-    "content1": "Content 1"
+    "name": "Shoyu • Sakuryne",
+    "tagline": "Full-Stack Developer · Open Source Enthusiast",
+    "techStack": "Tech Stack",
+    "social": {
+      "github": "GitHub",
+      "blog": "Blog",
+      "email": "Email"
+    },
+    "stats": {
+      "years": "Years Exp",
+      "projects": "Projects"
+    }
   },
   "about": {
     "title": "About Page",

@@ -5,15 +5,52 @@
         class="card card-first"
         :class="{ 'animate': showFirstCard }"
       >
-        <h1>{{ $t('home.title') }}</h1>
-        <p>{{ $t('home.description') }}</p>
+        <div class="card-content">
+          <div class="avatar">
+            <img src="/sakuryne260401.webp" alt="avatar" class="avatar-img" />
+          </div>
+          <div class="info-section">
+            <h1 class="name">{{ $t('home.name') }}</h1>
+            <p class="tagline">{{ $t('home.tagline') }}</p>
+            <div class="social-links">
+              <a href="https://github.com/shoyu3" target="_blank" rel="noopener" class="social-link" :title="$t('home.social.github')">
+                <icon-lucide-github />
+              </a>
+              <!-- <a href="https://blog.shoyu.top" target="_blank" rel="noopener" class="social-link" :title="$t('home.social.blog')">
+                <icon-lucide-book-open />
+              </a>
+              <a href="mailto:hello@example.com" class="social-link" :title="$t('home.social.email')">
+                <icon-lucide-mail />
+              </a> -->
+            </div>
+          </div>
+        </div>
       </div>
       <div
         class="card card-second"
         :class="{ 'animate': showSecondCard }"
       >
-        <h1>{{ $t('home.title1') }}</h1>
-        <p>{{ $t('home.content1') }}</p>
+        <div class="card-content">
+          <div class="tech-section">
+            <h2 class="section-title">{{ $t('home.techStack') }}</h2>
+            <div class="tech-tags">
+              <span class="tech-tag">Vue</span>
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Node.js</span>
+              <span class="tech-tag">Python</span>
+            </div>
+          </div>
+          <div class="stats-section">
+            <div class="stat-item">
+              <span class="stat-value">3+</span>
+              <span class="stat-label">{{ $t('home.stats.years') }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-value">10+</span>
+              <span class="stat-label">{{ $t('home.stats.projects') }}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </TiltContainer>
     <FloatingControls />
@@ -64,8 +101,7 @@ onMounted(() => {
   background-color: var(--glass-bg);
   border: 1px solid var(--glass-border);
   border-radius: 1rem;
-  padding: 3rem 4rem;
-  text-align: center;
+  padding: 2rem 2.5rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   max-width: 500px;
   width: 100%;
@@ -77,7 +113,6 @@ onMounted(() => {
   opacity: 0;
 }
 
-/* 第一个卡片 - 从中心跃出到上方偏左 */
 .card-first {
   transform: translate(-50%, -50%) scale(0.3);
   transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -88,7 +123,6 @@ onMounted(() => {
   transform: translate(calc(-50% - 10vw), calc(-50% - 15vh)) scale(1);
 }
 
-/* 第二个卡片 - 从中心跃出到下方偏右 */
 .card-second {
   transform: translate(-50%, -50%) scale(0.3);
   transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -99,31 +133,157 @@ onMounted(() => {
   transform: translate(calc(-50% + 10vw), calc(-50% + 15vh)) scale(1);
 }
 
-.card h1 {
+/* 卡片一：头像居左，内容右对齐 */
+.card-first .card-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  /* background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(var(--primary-rgb), 0.3);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.info-section {
+  flex: 1;
+  text-align: right;
+}
+
+.name {
   color: var(--foreground);
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   font-weight: 600;
+  margin-bottom: 0.375rem;
+  transition: color 0.3s ease;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 0.875rem;
   margin-bottom: 1rem;
   transition: color 0.3s ease;
 }
 
-.card p {
-  color: var(--muted);
-  font-size: 1.125rem;
-  line-height: 1.6;
+.social-links {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.social-link {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  background-color: var(--primary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground);
+  transition: all 0.3s ease;
+}
+
+.social-link:hover {
+  background-color: var(--primary);
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.social-link svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+/* 卡片二：Tech Stack居左，统计数据居右（一上一下） */
+.card-second .card-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.tech-section {
+  flex: 1;
+}
+
+.section-title {
+  color: var(--foreground);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
   transition: color 0.3s ease;
 }
 
-/* 响应式适配 */
+.tech-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.tech-tag {
+  padding: 0.25rem 0.625rem;
+  background-color: var(--primary-bg);
+  color: var(--primary);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.tech-tag:hover {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.stats-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stat-value {
+  color: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 0.7rem;
+  margin-top: 0.125rem;
+}
+
 @media (max-width: 768px) {
   .home {
     padding: 1rem;
   }
 
   .card {
-    padding: 2.5rem 1.5rem;
+    padding: 1.5rem;
     max-width: none;
-    width: 60%;
+    width: 75%;
   }
 
   .card-first.animate {
@@ -134,20 +294,64 @@ onMounted(() => {
     transform: translate(calc(-50% + 15%), calc(-50% + 10vh)) scale(1);
   }
 
-  .card h1 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+  /* 移动端卡片一调整 */
+  .card-first .card-content {
+    gap: 1rem;
   }
 
-  .card p {
+  .avatar {
+    width: 4rem;
+    height: 4rem;
+  }
+
+
+
+  .name {
+    font-size: 1.375rem;
+  }
+
+  .tagline {
+    font-size: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .social-link {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .social-link svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* 移动端卡片二调整 */
+  .card-second .card-content {
+    gap: 1rem;
+  }
+
+  .section-title {
     font-size: 0.875rem;
+  }
+
+  .tech-tag {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.65rem;
+  }
+
+  .stat-value {
+    font-size: 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
   }
 }
 
 @media (max-width: 480px) {
   .card {
-    padding: 2rem 1.25rem;
-    width: 80%;
+    padding: 1.25rem;
+    width: 85%;
   }
 
   .card-first.animate {
@@ -158,13 +362,57 @@ onMounted(() => {
     transform: translate(calc(-50% + 5%), calc(-50% + 8vh)) scale(1);
   }
 
-  .card h1 {
+  .avatar {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+
+
+  .name {
     font-size: 1.125rem;
   }
 
-  .card p {
+  .tagline {
+    font-size: 0.7rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .social-link {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.375rem;
+  }
+
+  .social-link svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .section-title {
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .tech-tags {
+    gap: 0.25rem;
+  }
+
+  .tech-tag {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.6rem;
+  }
+
+  .stats-section {
+    gap: 0.5rem;
+  }
+
+  .stat-value {
     font-size: 0.875rem;
-    line-height: 1.4;
+  }
+
+  .stat-label {
+    font-size: 0.55rem;
   }
 }
 </style>
