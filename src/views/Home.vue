@@ -146,8 +146,8 @@ onMounted(() => {
 
 .avatar {
   flex-shrink: 0;
-  width: 8rem;
-  height: 8rem;
+  width: 7rem;
+  height: 7rem;
   border-radius: 50%;
   /* background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); */
   display: flex;
@@ -368,8 +368,8 @@ onMounted(() => {
   }
 
   .avatar {
-    width: 4rem;
-    height: 4rem;
+    width: 5rem;
+    height: 5rem;
   }
 
 
