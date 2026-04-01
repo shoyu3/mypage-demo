@@ -3,6 +3,8 @@
     <transition
       name="page"
       mode="out-in"
+      appear
+      @before-enter="onBeforeEnter"
       @before-leave="onBeforeLeave"
       @after-enter="onAfterEnter"
     >
@@ -12,12 +14,25 @@
 </template>
 
 <script setup>
+import { ref, provide } from 'vue'
+
+const isFirstLoad = ref(true)
+provide('isFirstLoad', isFirstLoad)
+
+function onBeforeEnter() {
+  document.body.style.overflow = 'hidden'
+}
+
 function onBeforeLeave() {
   document.body.style.overflow = 'hidden'
 }
 
 function onAfterEnter() {
-  document.body.style.overflow = ''
+  const delay = isFirstLoad.value ? 1200 : 400
+  setTimeout(() => {
+    document.body.style.overflow = ''
+  }, delay)
+  isFirstLoad.value = false
 }
 </script>
 

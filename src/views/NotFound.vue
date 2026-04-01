@@ -19,24 +19,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, inject, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import TiltContainer from '@/components/TiltContainer.vue'
 import FloatingControls from '@/components/FloatingControls.vue'
 
 const router = useRouter()
-
-// 卡片动画控制
+const isFirstLoad = inject('isFirstLoad')
 const showCard = ref(false)
 
 onMounted(() => {
-  // 触发卡片跃出动画
+  const baseDelay = isFirstLoad.value ? 500 : 100
   setTimeout(() => {
     showCard.value = true
-  }, 100)
+  }, baseDelay)
 })
 
-// 返回首页
 function goHome() {
   router.push('/')
 }

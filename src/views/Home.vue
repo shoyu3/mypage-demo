@@ -21,22 +21,22 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, inject, onMounted } from 'vue'
 import TiltContainer from '@/components/TiltContainer.vue'
 import FloatingControls from '@/components/FloatingControls.vue'
 
-// 卡片动画控制
+const isFirstLoad = inject('isFirstLoad')
 const showFirstCard = ref(false)
 const showSecondCard = ref(false)
 
 onMounted(() => {
-  // 触发卡片跃出动画
+  const baseDelay = isFirstLoad.value ? 500 : 100
   setTimeout(() => {
     showFirstCard.value = true
-  }, 100)
+  }, baseDelay)
   setTimeout(() => {
     showSecondCard.value = true
-  }, 400)
+  }, baseDelay + 300)
 })
 </script>
 
