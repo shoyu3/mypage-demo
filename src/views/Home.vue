@@ -58,7 +58,7 @@ onUnmounted(() => {
 <style scoped>
 .home {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
 }
 
@@ -77,7 +77,8 @@ onUnmounted(() => {
   z-index: 1;
   width: 100%;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: 4rem;
 }
 
 .scroll-hint {
