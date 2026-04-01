@@ -304,10 +304,10 @@ onMounted(() => {
     gap: 1rem;
   }
 
-  /* .avatar {
-    width: 5rem;
-    height: 5rem;
-  } */
+  .avatar {
+    width: 6rem;
+    height: 6rem;
+  }
 
 
 
@@ -367,10 +367,10 @@ onMounted(() => {
     transform: translate(calc(-50% + 5%), calc(-50% + 13vh)) scale(1);
   }
 
-  /* .avatar {
-    width: 3.5rem;
-    height: 3.5rem;
-  } */
+  .avatar {
+    width: 4rem;
+    height: 4rem;
+  }
 
 
 
