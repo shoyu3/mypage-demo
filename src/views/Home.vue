@@ -105,7 +105,7 @@ onMounted(() => {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   max-width: 550px;
   width: 100%;
-  min-height: 200px;
+  min-height: 170px;
   backdrop-filter: blur(4px);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   position: absolute;
