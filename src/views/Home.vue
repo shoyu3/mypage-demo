@@ -311,17 +311,17 @@ onUnmounted(() => {
   }
 
   .card {
-    padding: 1.5rem 1rem;
+    padding: 2.5rem 1.5rem;
     max-width: none;
     width: 80%;
   }
 
   .card-first.animate {
-    transform: translate(calc(-50% - 5%), calc(-50% - 15vh)) scale(1);
+    transform: translate(calc(-50% - 5%), calc(-50% - 10vh)) scale(1);
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 5%), calc(-50% + 15vh)) scale(1);
+    transform: translate(calc(-50% + 5%), calc(-50% + 10vh)) scale(1);
   }
 
   .card h1 {
@@ -336,16 +336,16 @@ onUnmounted(() => {
 
 @media (max-width: 480px) {
   .card {
-    padding: 1.25rem 1rem;
+    padding: 2rem 1.25rem;
     width: 80%;
   }
 
   .card-first.animate {
-    transform: translate(calc(-50% - 5%), calc(-50% - 15vh)) scale(1);
+    transform: translate(calc(-50% - 5%), calc(-50% - 8vh)) scale(1);
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 5%), calc(-50% + 15vh)) scale(1);
+    transform: translate(calc(-50% + 5%), calc(-50% + 8vh)) scale(1);
   }
 
   .card h1 {
