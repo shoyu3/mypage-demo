@@ -1,19 +1,17 @@
 <template>
-  <div class="home">
-    <TiltContainer class="cards-wrapper">
+  <div class="not-found">
+    <TiltContainer class="card-wrapper">
       <div
-        class="card card-first"
-        :class="{ 'animate': showFirstCard }"
+        class="card"
+        :class="{ 'animate': showCard }"
       >
-        <h1>{{ $t('home.title') }}</h1>
-        <p>{{ $t('home.description') }}</p>
-      </div>
-      <div
-        class="card card-second"
-        :class="{ 'animate': showSecondCard }"
-      >
-        <h1>{{ $t('home.title1') }}</h1>
-        <p>{{ $t('home.content1') }}</p>
+        <div class="error-code">404</div>
+        <h1>{{ $t('notFound.title') }}</h1>
+        <p>{{ $t('notFound.description') }}</p>
+        <router-link to="/" class="home-button">
+          <icon-lucide-home class="button-icon" />
+          {{ $t('notFound.backHome') }}
+        </router-link>
       </div>
     </TiltContainer>
     <FloatingControls />
@@ -26,22 +24,18 @@ import TiltContainer from '@/components/TiltContainer.vue'
 import FloatingControls from '@/components/FloatingControls.vue'
 
 // 卡片动画控制
-const showFirstCard = ref(false)
-const showSecondCard = ref(false)
+const showCard = ref(false)
 
 onMounted(() => {
   // 触发卡片跃出动画
   setTimeout(() => {
-    showFirstCard.value = true
+    showCard.value = true
   }, 100)
-  setTimeout(() => {
-    showSecondCard.value = true
-  }, 400)
 })
 </script>
 
 <style scoped>
-.home {
+.not-found {
   width: 100%;
   height: 100%;
   display: flex;
@@ -55,9 +49,12 @@ onMounted(() => {
   perspective: 1000px;
 }
 
-.cards-wrapper {
+.card-wrapper {
   position: absolute;
   inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card {
@@ -71,37 +68,28 @@ onMounted(() => {
   width: 100%;
   backdrop-filter: blur(4px);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-  position: absolute;
-  top: 50%;
-  left: 50%;
   opacity: 0;
-}
-
-/* 第一个卡片 - 从中心跃出到上方偏左 */
-.card-first {
-  transform: translate(-50%, -50%) scale(0.3);
+  transform: scale(0.3);
   transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.card-first.animate {
+.card.animate {
   opacity: 1;
-  transform: translate(calc(-50% - 10vw), calc(-50% - 15vh)) scale(1);
+  transform: scale(1);
 }
 
-/* 第二个卡片 - 从中心跃出到下方偏右 */
-.card-second {
-  transform: translate(-50%, -50%) scale(0.3);
-  transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.card-second.animate {
-  opacity: 1;
-  transform: translate(calc(-50% + 10vw), calc(-50% + 15vh)) scale(1);
+.error-code {
+  font-size: 6rem;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1;
+  margin-bottom: 1rem;
+  opacity: 0.8;
 }
 
 .card h1 {
   color: var(--foreground);
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 600;
   margin-bottom: 1rem;
   transition: color 0.3s ease;
@@ -111,60 +99,83 @@ onMounted(() => {
   color: var(--muted);
   font-size: 1.125rem;
   line-height: 1.6;
+  margin-bottom: 2rem;
   transition: color 0.3s ease;
+}
+
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background-color: var(--primary);
+  color: #ffffff;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  border: none;
+  position: relative;
+}
+
+.home-button:hover {
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.button-icon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 /* 响应式适配 */
 @media (max-width: 768px) {
-  .home {
+  .not-found {
     padding: 1rem;
   }
 
   .card {
     padding: 2.5rem 1.5rem;
     max-width: none;
-    width: 60%;
+    width: 80%;
   }
 
-  .card-first.animate {
-    transform: translate(calc(-50% - 15%), calc(-50% - 10vh)) scale(1);
-  }
-
-  .card-second.animate {
-    transform: translate(calc(-50% + 15%), calc(-50% + 10vh)) scale(1);
+  .error-code {
+    font-size: 4rem;
   }
 
   .card h1 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
   }
 
   .card p {
-    font-size: 0.875rem;
+    font-size: 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .card {
     padding: 2rem 1.25rem;
-    width: 80%;
+    width: 90%;
   }
 
-  .card-first.animate {
-    transform: translate(calc(-50% - 5%), calc(-50% - 8vh)) scale(1);
-  }
-
-  .card-second.animate {
-    transform: translate(calc(-50% + 5%), calc(-50% + 8vh)) scale(1);
+  .error-code {
+    font-size: 3.5rem;
   }
 
   .card h1 {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
   }
 
   .card p {
     font-size: 0.875rem;
     line-height: 1.4;
+  }
+
+  .home-button {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.875rem;
   }
 }
 </style>
