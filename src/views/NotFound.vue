@@ -8,10 +8,10 @@
         <div class="error-code">404</div>
         <h1>{{ $t('notFound.title') }}</h1>
         <p>{{ $t('notFound.description') }}</p>
-        <router-link to="/" class="home-button">
+        <button class="home-button" @click="goHome">
           <icon-lucide-home class="button-icon" />
           {{ $t('notFound.backHome') }}
-        </router-link>
+        </button>
       </div>
     </TiltContainer>
     <FloatingControls />
@@ -20,8 +20,11 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import TiltContainer from '@/components/TiltContainer.vue'
 import FloatingControls from '@/components/FloatingControls.vue'
+
+const router = useRouter()
 
 // 卡片动画控制
 const showCard = ref(false)
@@ -32,6 +35,21 @@ onMounted(() => {
     showCard.value = true
   }, 100)
 })
+
+// 返回首页
+function goHome() {
+  // 添加离开动画类名，等待动画完成后再跳转
+  const card = document.querySelector('.card')
+  if (card) {
+    card.style.transition = 'opacity 0.4s ease, transform 0.4s ease'
+    card.style.opacity = '0'
+    card.style.transform = 'translateY(30px) scale(0.9)'
+  }
+  
+  setTimeout(() => {
+    router.push('/')
+  }, 400)
+}
 </script>
 
 <style scoped>
