@@ -249,12 +249,12 @@ const storyParagraphs = computed(() => {
 
   .section-title {
     font-size: 2rem;
-    text-align: center;
+    text-align: left;
   }
 
   .section-title::after {
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    transform: none;
   }
 
   .paragraph {

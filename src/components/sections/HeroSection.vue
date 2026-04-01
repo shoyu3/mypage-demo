@@ -300,7 +300,7 @@ onMounted(() => {
   }
 
   .name {
-    font-size: 1.625rem;
+    font-size: 1.3rem;
   }
 
   .tagline {
@@ -360,7 +360,7 @@ onMounted(() => {
   }
 
   .name {
-    font-size: 1.375rem;
+    font-size: 1.1rem;
   }
 
   .tagline {

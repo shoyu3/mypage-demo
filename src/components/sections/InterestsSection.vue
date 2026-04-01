@@ -28,10 +28,12 @@
             </div>
             
             <div 
-              class="card-content" 
+              class="card-content-wrapper"
               :class="{ 'is-collapsed': activeInterest !== key }"
             >
-              <p class="interest-desc">{{ $t(`interests.items.${key}.desc`) }}</p>
+              <div class="card-content">
+                <p class="interest-desc">{{ $t(`interests.items.${key}.desc`) }}</p>
+              </div>
             </div>
           </div>
         </FadeInUp>
@@ -205,23 +207,31 @@ const toggleInterest = (key) => {
   color: var(--primary);
 }
 
-.card-content {
+.card-content-wrapper {
+  display: grid;
+  grid-template-rows: 1fr;
   margin-top: 1rem;
-  padding-top: 1rem;
   border-top: 1px solid var(--glass-border);
-  width: 100%;
-  box-sizing: border-box;
-  opacity: 1;
-  overflow: hidden;
-  transition: all 0.3s ease;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              margin-top 0.3s ease,
+              border-top-color 0.3s ease;
 }
 
-.card-content.is-collapsed {
-  max-height: 0;
-  opacity: 0;
+.card-content-wrapper.is-collapsed {
+  grid-template-rows: 0fr;
   margin-top: 0;
-  padding-top: 0;
   border-top-color: transparent;
+}
+
+.card-content {
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+  /* padding-top: 1rem; */
+}
+
+.card-content-wrapper.is-collapsed .card-content {
+  opacity: 0;
 }
 
 .interest-desc {
