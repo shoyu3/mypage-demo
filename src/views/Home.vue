@@ -313,15 +313,15 @@ onUnmounted(() => {
   .card {
     padding: 2.5rem 1.5rem;
     max-width: none;
-    width: 80%;
+    width: 60%;
   }
 
   .card-first.animate {
-    transform: translate(calc(-50% - 5%), calc(-50% - 10vh)) scale(1);
+    transform: translate(calc(-50% - 15%), calc(-50% - 10vh)) scale(1);
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 5%), calc(-50% + 10vh)) scale(1);
+    transform: translate(calc(-50% + 15%), calc(-50% + 10vh)) scale(1);
   }
 
   .card h1 {
