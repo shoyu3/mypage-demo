@@ -70,7 +70,7 @@ function goHome() {
   padding: 3rem 4rem;
   text-align: center;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
+  max-width: 600px;
   width: 100%;
   backdrop-filter: blur(4px);
   transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
