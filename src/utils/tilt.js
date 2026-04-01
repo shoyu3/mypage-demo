@@ -4,7 +4,7 @@ export const BASELINE_BETA = 0
 export const BASELINE_GAMMA = 0
 
 // 最大倾斜角度
-export const MAX_TILT = 15
+export const MAX_TILT = 8
 
 /**
  * 根据鼠标位置计算容器倾斜角度

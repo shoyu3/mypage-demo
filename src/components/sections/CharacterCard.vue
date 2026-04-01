@@ -1,7 +1,8 @@
 <template>
   <section class="character-section" id="character" :style="{ minHeight: viewportHeight + 'px' }">
-    <GlowCard class="character-card">
-      <div class="card-inner">
+    <TiltContainer class="tilt-wrapper">
+      <GlowCard class="character-card">
+        <div class="card-inner">
         <!-- 左侧：立绘区域 -->
         <div class="character-visual">
           <div class="character-avatar">
@@ -82,7 +83,8 @@
           <p class="character-desc">{{ $t('character.description') }}</p>
         </div>
       </div>
-    </GlowCard>
+      </GlowCard>
+    </TiltContainer>
   </section>
 </template>
 
@@ -91,6 +93,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import GlowCard from '@/components/ui/GlowCard.vue'
 import CountUp from '@/components/ui/CountUp.vue'
+import TiltContainer from '@/components/TiltContainer.vue'
 
 const props = defineProps({
   viewportHeight: {
@@ -122,6 +125,13 @@ const statValues = {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+  perspective: 1000px;
+}
+
+.tilt-wrapper {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .character-card {

@@ -1,43 +1,45 @@
 <template>
   <section class="about-section" id="about" :style="{ minHeight: viewportHeight + 'px' }">
-    <div class="container">
-      <FadeInUp direction="left" class="content-wrapper">
-        <div class="text-content">
-          <h2 class="section-title">{{ $t('about.title') }}</h2>
-          <div class="story-text">
-            <p v-for="(paragraph, index) in storyParagraphs" :key="index" class="paragraph">
-              {{ paragraph }}
-            </p>
+    <TiltContainer class="tilt-wrapper">
+      <div class="container">
+        <FadeInUp direction="left" class="content-wrapper">
+          <div class="text-content">
+            <h2 class="section-title">{{ $t('about.title') }}</h2>
+            <div class="story-text">
+              <p v-for="(paragraph, index) in storyParagraphs" :key="index" class="paragraph">
+                {{ paragraph }}
+              </p>
+            </div>
           </div>
-        </div>
-      </FadeInUp>
+        </FadeInUp>
 
-      <FadeInUp direction="right" :delay="200" class="image-wrapper">
-        <div class="avatar-showcase">
-          <div class="avatar-ring">
-            <img src="/sakuryne260401.webp" alt="avatar" class="showcase-img" />
+        <FadeInUp direction="right" :delay="200" class="image-wrapper">
+          <div class="avatar-showcase">
+            <div class="avatar-ring">
+              <img src="/sakuryne260401.webp" alt="avatar" class="showcase-img" />
+            </div>
+            <div class="floating-elements">
+              <span class="float-item" style="--delay: 0s">✨</span>
+              <span class="float-item" style="--delay: 0.5s">🌸</span>
+              <span class="float-item" style="--delay: 1s">💻</span>
+              <span class="float-item" style="--delay: 1.5s">☕</span>
+            </div>
           </div>
-          <div class="floating-elements">
-            <span class="float-item" style="--delay: 0s">✨</span>
-            <span class="float-item" style="--delay: 0.5s">🌸</span>
-            <span class="float-item" style="--delay: 1s">💻</span>
-            <span class="float-item" style="--delay: 1.5s">☕</span>
-          </div>
-        </div>
-      </FadeInUp>
-    </div>
-
-    <FadeInUp :delay="400" class="philosophy-wrapper">
-      <div class="philosophy-card">
-        <icon-lucide-quote class="quote-icon" />
-        <TypeWriter 
-          :text="$t('about.philosophy')" 
-          :speed="60" 
-          :delay="800"
-          class="philosophy-text"
-        />
+        </FadeInUp>
       </div>
-    </FadeInUp>
+
+      <FadeInUp :delay="400" class="philosophy-wrapper">
+        <div class="philosophy-card">
+          <icon-lucide-quote class="quote-icon" />
+          <TypeWriter 
+            :text="$t('about.philosophy')" 
+            :speed="60" 
+            :delay="800"
+            class="philosophy-text"
+          />
+        </div>
+      </FadeInUp>
+    </TiltContainer>
 
     <!-- Scroll Down Indicator -->
     <div class="scroll-indicator" @click="$emit('scrollNext')">
@@ -54,6 +56,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import FadeInUp from '@/components/ui/FadeInUp.vue'
 import TypeWriter from '@/components/ui/TypeWriter.vue'
+import TiltContainer from '@/components/TiltContainer.vue'
 
 const props = defineProps({
   viewportHeight: {
@@ -81,6 +84,13 @@ const storyParagraphs = computed(() => {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+  perspective: 1000px;
+}
+
+.tilt-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .about-section::before {

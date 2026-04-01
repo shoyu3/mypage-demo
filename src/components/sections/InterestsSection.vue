@@ -1,39 +1,41 @@
 <template>
   <section class="interests-section" id="interests" :style="{ minHeight: viewportHeight + 'px' }">
-    <FadeInUp>
-      <h2 class="section-title">{{ $t('interests.title') }}</h2>
-    </FadeInUp>
-
-    <div class="interests-grid">
-      <FadeInUp 
-        v-for="(key, index) in interestKeys" 
-        :key="key"
-        :delay="index * 100"
-      >
-        <div 
-          class="interest-card"
-          :class="{ 'is-active': activeInterest === key }"
-          @click="toggleInterest(key)"
-        >
-          <div class="card-header">
-            <div class="icon-wrapper">
-              <component :is="getIcon(key)" class="interest-icon" />
-            </div>
-            <h3 class="interest-title">{{ $t(`interests.items.${key}.title`) }}</h3>
-            <icon-lucide-chevron-down 
-              class="expand-icon"
-              :class="{ 'is-expanded': activeInterest === key }"
-            />
-          </div>
-          
-          <Transition name="expand">
-            <div v-show="activeInterest === key" class="card-content">
-              <p class="interest-desc">{{ $t(`interests.items.${key}.desc`) }}</p>
-            </div>
-          </Transition>
-        </div>
+    <TiltContainer class="tilt-wrapper">
+      <FadeInUp>
+        <h2 class="section-title">{{ $t('interests.title') }}</h2>
       </FadeInUp>
-    </div>
+
+      <div class="interests-grid">
+        <FadeInUp 
+          v-for="(key, index) in interestKeys" 
+          :key="key"
+          :delay="index * 100"
+        >
+          <div 
+            class="interest-card"
+            :class="{ 'is-active': activeInterest === key }"
+            @click="toggleInterest(key)"
+          >
+            <div class="card-header">
+              <div class="icon-wrapper">
+                <component :is="getIcon(key)" class="interest-icon" />
+              </div>
+              <h3 class="interest-title">{{ $t(`interests.items.${key}.title`) }}</h3>
+              <icon-lucide-chevron-down 
+                class="expand-icon"
+                :class="{ 'is-expanded': activeInterest === key }"
+              />
+            </div>
+            
+            <Transition name="expand">
+              <div v-show="activeInterest === key" class="card-content">
+                <p class="interest-desc">{{ $t(`interests.items.${key}.desc`) }}</p>
+              </div>
+            </Transition>
+          </div>
+        </FadeInUp>
+      </div>
+    </TiltContainer>
 
     <!-- Scroll Down Indicator -->
     <div class="scroll-indicator" @click="$emit('scrollNext')">
@@ -48,6 +50,7 @@
 <script setup>
 import { ref } from 'vue'
 import FadeInUp from '@/components/ui/FadeInUp.vue'
+import TiltContainer from '@/components/TiltContainer.vue'
 import IconMusic from '~icons/lucide/music'
 import IconBook from '~icons/lucide/book-open'
 import IconGamepad from '~icons/lucide/gamepad-2'
@@ -91,6 +94,13 @@ const toggleInterest = (key) => {
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+  perspective: 1000px;
+}
+
+.tilt-wrapper {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .section-title {
@@ -133,6 +143,8 @@ const toggleInterest = (key) => {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  z-index: 10;
+  pointer-events: auto;
 }
 
 .interest-card::before {
