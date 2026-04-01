@@ -1,5 +1,5 @@
 <template>
-  <section class="hero-section" id="hero" style="min-height: 100vh">
+  <section class="hero-section h-full" id="hero">
     <TiltContainer class="cards-wrapper">
       <div
         class="card card-first"
@@ -72,6 +72,7 @@ onMounted(() => {
 <style scoped>
 .hero-section {
   width: 100%;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -82,8 +83,10 @@ onMounted(() => {
 }
 
 .cards-wrapper {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 600px;
 }
 
 .card {
@@ -282,7 +285,7 @@ onMounted(() => {
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 15%), calc(-50% + 4vh)) scale(1);
+    transform: translate(calc(-50% + 15%), calc(-50% + 10vh)) scale(1);
   }
 
   .card-first .card-content {
@@ -346,7 +349,7 @@ onMounted(() => {
   }
 
   .card-second.animate {
-    transform: translate(calc(-50% + 5%), calc(-50% + 2vh)) scale(1);
+    transform: translate(calc(-50% + 5%), calc(-50% + 8vh)) scale(1);
   }
 
   .avatar {

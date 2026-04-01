@@ -1,5 +1,5 @@
 <template>
-  <section class="interests-section" id="interests" style="min-height: 100vh">
+  <section class="interests-section h-full" id="interests">
     <TiltContainer class="tilt-wrapper">
       <FadeInUp>
         <h2 class="section-title">{{ $t('interests.title') }}</h2>
@@ -27,11 +27,12 @@
               />
             </div>
             
-            <Transition name="expand">
-              <div v-show="activeInterest === key" class="card-content">
-                <p class="interest-desc">{{ $t(`interests.items.${key}.desc`) }}</p>
-              </div>
-            </Transition>
+            <div 
+              class="card-content" 
+              :class="{ 'is-collapsed': activeInterest !== key }"
+            >
+              <p class="interest-desc">{{ $t(`interests.items.${key}.desc`) }}</p>
+            </div>
           </div>
         </FadeInUp>
       </div>
@@ -75,9 +76,9 @@ const toggleInterest = (key) => {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: visible;
   perspective: 1000px;
+  height: 100%;
 }
 
 .tilt-wrapper {
@@ -111,7 +112,7 @@ const toggleInterest = (key) => {
   max-width: 1000px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   width: 100%;
 }
@@ -128,6 +129,8 @@ const toggleInterest = (key) => {
   overflow: hidden;
   z-index: 10;
   pointer-events: auto;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .interest-card::before {
@@ -205,29 +208,33 @@ const toggleInterest = (key) => {
   margin-top: 1rem;
   padding-top: 1rem;
   border-top: 1px solid var(--glass-border);
+  width: 100%;
+  box-sizing: border-box;
+  max-height: 200px;
+  opacity: 1;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card-content.is-collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  padding-top: 0;
+  border-top-color: transparent;
 }
 
 .interest-desc {
   font-size: 0.95rem;
   line-height: 1.7;
   color: var(--muted);
+  word-break: break-word;
 }
 
-/* Expand transition */
-.expand-enter-active,
-.expand-leave-active {
-  transition: all 0.3s ease;
-  max-height: 200px;
-  opacity: 1;
-  overflow: hidden;
-}
-
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
-  opacity: 0;
-  margin-top: 0;
-  padding-top: 0;
+@media (max-width: 1024px) {
+  .interests-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -243,6 +250,7 @@ const toggleInterest = (key) => {
   .interests-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
+    width: 70vw;
   }
 
   .interest-card {

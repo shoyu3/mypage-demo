@@ -1,5 +1,5 @@
 <template>
-  <section class="character-section" id="character" style="min-height: 100vh">
+  <section class="character-section h-full" id="character">
     <TiltContainer class="tilt-wrapper">
       <GlowCard class="character-card">
         <div class="card-inner">
@@ -121,9 +121,9 @@ const statValues = {
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: visible;
   perspective: 1000px;
+  height: 100%;
 }
 
 .tilt-wrapper {
@@ -170,13 +170,14 @@ const statValues = {
 
 .avatar-glow {
   position: absolute;
-  inset: -10px;
+  inset: 0;
   background: linear-gradient(135deg, var(--primary) 0%, transparent 50%, var(--primary-hover) 100%);
   border-radius: 1.25rem;
   opacity: 0.5;
   filter: blur(20px);
   animation: pulse-glow 3s ease-in-out infinite;
   z-index: 1;
+  transform: scale(1.1);
 }
 
 @keyframes pulse-glow {

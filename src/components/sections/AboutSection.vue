@@ -1,5 +1,5 @@
 <template>
-  <section class="about-section" id="about" style="min-height: 100vh">
+  <section class="about-section h-full" id="about">
     <TiltContainer class="tilt-wrapper">
       <div class="container">
         <FadeInUp direction="left" class="content-wrapper">
@@ -69,9 +69,9 @@ const storyParagraphs = computed(() => {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: visible;
   perspective: 1000px;
+  height: 100%;
 }
 
 .tilt-wrapper {
@@ -94,7 +94,7 @@ const storyParagraphs = computed(() => {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 4rem;
   align-items: center;
 }
