@@ -1,5 +1,5 @@
 <template>
-  <section class="hero-section h-full" id="hero">
+  <section class="hero-section" id="hero">
     <TiltContainer class="cards-wrapper">
       <div
         class="card card-first"
@@ -80,6 +80,8 @@ onMounted(() => {
   position: relative;
   overflow: hidden;
   perspective: 1000px;
+  overflow-x: clip;
+  flex-shrink: 0;
 }
 
 .cards-wrapper {

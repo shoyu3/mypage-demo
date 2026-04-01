@@ -29,17 +29,17 @@
       "music": {
         "title": "Music",
         "icon": "music",
-        "desc": "Love J-Pop, electronic music, and Lo-Fi. Often listen to Fujii Kaze, YOASOBI, and various game soundtracks while working."
+        "desc": "Passionate about Chinese-style music, ancient-style music, and instrumental music. Love immersing myself in melodies that blend traditional instruments with modern arrangements, experiencing the unique charm of Eastern aesthetics."
       },
       "gaming": {
         "title": "Gaming",
         "icon": "gamepad",
-        "desc": "RPG and indie game player. Favorites include Zelda, Hades, and various pixel art indie games."
+        "desc": "An avid gacha game player, especially fond of miHoYo titles (Genshin Impact, Honkai series, etc.). Also a Minecraft enthusiast who enjoys the creative and exploratory freedom in the blocky world."
       },
       "collecting": {
         "title": "Collecting",
         "icon": "box",
-        "desc": "Collect mechanical keyboards and interesting gadgets. Each keyboard has its own story and tactile memory."
+        "desc": "Love collecting everyday life and landscape photos I capture spontaneously. Each photo freezes a moment in life, documenting the beauty and emotions found in ordinary days."
       }
     }
   },

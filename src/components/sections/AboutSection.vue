@@ -1,5 +1,5 @@
 <template>
-  <section class="about-section h-full" id="about">
+  <section class="about-section" id="about">
     <TiltContainer class="tilt-wrapper">
       <div class="container">
         <FadeInUp direction="left" class="content-wrapper">
@@ -69,9 +69,10 @@ const storyParagraphs = computed(() => {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   perspective: 1000px;
-  height: 100%;
+  min-height: 100vh;
+  flex-shrink: 0;
 }
 
 .tilt-wrapper {

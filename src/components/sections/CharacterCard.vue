@@ -1,5 +1,5 @@
 <template>
-  <section class="character-section h-full" id="character">
+  <section class="character-section" id="character">
     <TiltContainer class="tilt-wrapper">
       <GlowCard class="character-card">
         <div class="card-inner">
@@ -121,9 +121,10 @@ const statValues = {
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   perspective: 1000px;
-  height: 100%;
+  min-height: 100vh;
+  flex-shrink: 0;
 }
 
 .tilt-wrapper {

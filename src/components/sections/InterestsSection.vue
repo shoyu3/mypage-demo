@@ -1,5 +1,5 @@
 <template>
-  <section class="interests-section h-full" id="interests">
+  <section class="interests-section" id="interests">
     <TiltContainer class="tilt-wrapper">
       <FadeInUp>
         <h2 class="section-title">{{ $t('interests.title') }}</h2>
@@ -76,9 +76,10 @@ const toggleInterest = (key) => {
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
   perspective: 1000px;
-  height: 100%;
+  min-height: 100vh;
+  flex-shrink: 0;
 }
 
 .tilt-wrapper {
@@ -210,7 +211,6 @@ const toggleInterest = (key) => {
   border-top: 1px solid var(--glass-border);
   width: 100%;
   box-sizing: border-box;
-  max-height: 200px;
   opacity: 1;
   overflow: hidden;
   transition: all 0.3s ease;

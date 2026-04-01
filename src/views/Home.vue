@@ -1,101 +1,64 @@
 <template>
   <div class="home">
-    <!-- 固定背景层 -->
     <div class="fixed-background"></div>
 
-    <!-- 内容层 -->
-    <div class="content-wrapper">
-      <!-- Hero Section -->
-      <div class="section-wrapper">
-        <div class="section-sticky">
-          <HeroSection />
-        </div>
-      </div>
-
-      <!-- About Section -->
-      <div class="section-wrapper">
-        <div class="section-sticky">
-          <AboutSection />
-        </div>
-      </div>
-
-      <!-- Interests Section -->
-      <div class="section-wrapper">
-        <div class="section-sticky">
-          <InterestsSection />
-        </div>
-      </div>
-
-      <!-- Character Card Section -->
-      <div class="section-wrapper">
-        <div class="section-sticky">
-          <CharacterCard />
-        </div>
-      </div>
-    </div>
-
-    <!-- 滚动进度条 -->
-    <div class="scroll-progress-bar" v-if="showProgressBar">
-      <div class="progress-fill" :style="{ width: `${scrollProgress}%` }"></div>
+    <div ref="contentWrapperRef" class="content-wrapper">
+      <HeroSection />
+      <AboutSection />
+      <InterestsSection />
+      <CharacterCard />
     </div>
 
     <FloatingControls />
+
+    <Transition name="fade">
+      <div v-show="showScrollHint" class="scroll-hint">
+        <icon-lucide-circle-arrow-down class="scroll-hint-icon" />
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import HeroSection from '@/components/sections/HeroSection.vue'
 import FloatingControls from '@/components/FloatingControls.vue'
 import AboutSection from '@/components/sections/AboutSection.vue'
 import InterestsSection from '@/components/sections/InterestsSection.vue'
 import CharacterCard from '@/components/sections/CharacterCard.vue'
 
-const scrollProgress = ref(0)
-const showProgressBar = ref(true)
+const showScrollHint = ref(true)
+const contentWrapperRef = ref(null)
 
-function updateScrollProgress() {
-  const sectionHeight = window.innerHeight
-  const currentScroll = window.scrollY
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight
+function checkScrollPosition() {
+  const scrollTop = window.scrollY || document.documentElement.scrollTop
+  const scrollHeight = document.documentElement.scrollHeight
+  const clientHeight = window.innerHeight
   
-  // 检查是否已经滚动到页面底部（触底）
-  if (currentScroll >= maxScroll) {
-    showProgressBar.value = false
-    return
-  }
+  const canScroll = scrollHeight > clientHeight + 10
+  const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50
+  const shouldShow = canScroll && !isAtBottom
   
-  // 计算在 sticky 容器内的实际滚动进度（0-100%）
-  // sticky 容器高度为 200vh，其中前 100vh 是锁定阶段，后 100vh 是滚动阶段
-  const totalWrapperHeight = sectionHeight * 2 // 200vh
-  const scrollInWrapper = currentScroll % totalWrapperHeight
-  
-  // 如果滚动距离超过 100vh，说明已经进入滚动阶段，隐藏进度条
-  if (scrollInWrapper >= sectionHeight) {
-    showProgressBar.value = false
-    return
-  }
-  
-  // 显示进度条，计算距离阈值还有多少
-  showProgressBar.value = true
-  const progress = (scrollInWrapper / sectionHeight) * 100
-  scrollProgress.value = Math.min(100, Math.max(0, progress))
+  console.log('[ScrollHint] scrollTop:', scrollTop, 'scrollHeight:', scrollHeight, 'clientHeight:', clientHeight, 'canScroll:', canScroll, 'isAtBottom:', isAtBottom, 'shouldShow:', shouldShow)
+  showScrollHint.value = shouldShow
 }
 
 onMounted(() => {
-  window.addEventListener('scroll', updateScrollProgress)
-  updateScrollProgress()
+  nextTick(() => {
+    checkScrollPosition()
+  })
+  window.addEventListener('scroll', checkScrollPosition)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', updateScrollProgress)
+  window.removeEventListener('scroll', checkScrollPosition)
 })
 </script>
 
 <style scoped>
 .home {
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
   position: relative;
 }
 
@@ -113,37 +76,51 @@ onUnmounted(() => {
   position: relative;
   z-index: 1;
   width: 100%;
-}
-
-.section-wrapper {
-  position: relative;
-  height: 200vh;
-}
-
-.section-sticky {
-  position: sticky;
-  top: 0;
+  overflow-x: hidden;
   min-height: 100vh;
-  height: auto;
-  width: 100%;
+}
+
+.scroll-hint {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  animation: bounce 2s infinite;
+  pointer-events: none;
 }
 
-.scroll-progress-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background-color: var(--muted-bg);
-  z-index: 1000;
+.scroll-hint-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--foreground);
 }
 
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--primary) 0%, var(--primary-hover) 100%);
-  transition: width 0.1s ease-out;
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

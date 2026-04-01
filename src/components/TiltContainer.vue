@@ -130,5 +130,7 @@ onUnmounted(() => {
   will-change: transform;
   transform: rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg));
   transition: transform 0.1s ease-out;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 </style>
