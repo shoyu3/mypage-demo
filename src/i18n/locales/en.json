@@ -15,11 +15,101 @@
     "stats": {
       "years": "Years Exp",
       "projects": "Projects"
-    }
+    },
+    "scrollDown": "Scroll Down"
   },
   "about": {
-    "title": "About Page",
-    "description": "This is the about page"
+    "title": "About Me",
+    "story": "Hello, I'm Shoyu, a developer passionate about technology and creation. My curiosity for computers started at a young age, and from the first \"Hello World\", I embarked on this journey full of challenges and surprises.\n\nI believe code is not just a tool, but a way to express creativity. Behind every line of code lies problem-solving thinking and a pursuit of user experience. In the open source community, I found like-minded partners and learned the value of sharing and collaboration.\n\nOutside of work, I enjoy exploring new technologies, reading, gaming, and nurturing that other side of myself in the digital world—Sakuryne.",
+    "philosophy": "\"Code is poetry, logic is rhythm, creation is freedom.\""
+  },
+  "interests": {
+    "title": "Interests",
+    "items": {
+      "music": {
+        "title": "Music",
+        "icon": "music",
+        "desc": "Love J-Pop, electronic music, and Lo-Fi. Often listen to Fujii Kaze, YOASOBI, and various game soundtracks while working."
+      },
+      "reading": {
+        "title": "Reading",
+        "icon": "book",
+        "desc": "Sci-fi and mystery novel enthusiast. Recently reading \"The Three-Body Problem\" and Keigo Higashino's works. Prefer practical technical books."
+      },
+      "gaming": {
+        "title": "Gaming",
+        "icon": "gamepad",
+        "desc": "RPG and indie game player. Favorites include Zelda, Hades, and various pixel art indie games."
+      },
+      "sports": {
+        "title": "Sports",
+        "icon": "activity",
+        "desc": "Occasional running and cycling, enjoy outdoor hiking. Believe programmers also need sunshine and fresh air."
+      },
+      "collecting": {
+        "title": "Collecting",
+        "icon": "box",
+        "desc": "Collect mechanical keyboards and interesting gadgets. Each keyboard has its own story and tactile memory."
+      }
+    }
+  },
+  "character": {
+    "title": "Character Profile",
+    "name": "Sakuryne",
+    "subtitle": "// Cyber Spirit",
+    "race": "Digital Lifeform",
+    "origin": "Dimensional rift where code meets cherry blossoms",
+    "traits": ["Pink Gradient", "Glowing Patterns", "Night Owl"],
+    "stats": {
+      "creativity": "Creativity",
+      "coding": "Coding",
+      "nightOwl": "Night Owl Index",
+      "bugCollection": "Bug Collection"
+    },
+    "likes": ["Late Night Coding", "Matcha Latte", "Perfect Code", "Cherry Blossoms", "Electronic Music"],
+    "catchphrase": "Just one more version...",
+    "description": "Born from a dimensional fluctuation during a late-night debugging session, Sakuryne is Shoyu's other side in the digital world. Playful but focused when working, loves dancing in the glow of the IDE at midnight."
+  },
+  "stories": {
+    "title": "Mini Stories",
+    "dialogues": [
+      {
+        "speaker": "Sakuryne",
+        "avatar": "character",
+        "text": "Master, master! This bug looks like a little bunny!",
+        "time": "02:30"
+      },
+      {
+        "speaker": "Shoyu",
+        "avatar": "user",
+        "text": "...That's a memory leak, not a bunny. Go make me some coffee.",
+        "time": "02:31"
+      },
+      {
+        "speaker": "Sakuryne",
+        "avatar": "character",
+        "text": "Roger that! Matcha latte with double espresso, programmer's special~",
+        "time": "02:32"
+      },
+      {
+        "speaker": "Sakuryne",
+        "avatar": "character",
+        "text": "Master, why do humans always say 'just one more version' and then pull all-nighters?",
+        "time": "04:15"
+      },
+      {
+        "speaker": "Shoyu",
+        "avatar": "user",
+        "text": "That's the romance of programmers. You wouldn't understand.",
+        "time": "04:16"
+      },
+      {
+        "speaker": "Sakuryne",
+        "avatar": "character",
+        "text": "I understand! Just like when I say 'just one more video' and then it's morning!",
+        "time": "04:17"
+      }
+    ]
   },
   "language": {
     "switch": "Language",
