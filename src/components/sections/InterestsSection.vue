@@ -76,11 +76,11 @@ const toggleInterest = (key) => {
   padding: 4rem 1.5rem 6rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   overflow: hidden;
   perspective: 1000px;
-  min-height: 100vh;
+  min-height: 60vh;
   flex-shrink: 0;
 }
 

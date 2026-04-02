@@ -31,15 +31,26 @@ const showScrollHint = ref(true)
 const contentWrapperRef = ref(null)
 
 function checkScrollPosition() {
-  const scrollTop = window.scrollY || document.documentElement.scrollTop
-  const scrollHeight = document.documentElement.scrollHeight
   const clientHeight = window.innerHeight
   
-  const canScroll = scrollHeight > clientHeight + 10
-  const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50
+  const contentWrapper = contentWrapperRef.value
+  if (!contentWrapper) {
+    showScrollHint.value = false
+    return
+  }
+  
+  const contentHeight = contentWrapper.scrollHeight
+  const contentRect = contentWrapper.getBoundingClientRect()
+  
+  // 使用 getBoundingClientRect 计算实际的滚动位置
+  // contentRect.top 为负值时表示已经向上滚动了
+  const scrollTop = Math.abs(Math.min(0, contentRect.top))
+  const canScroll = contentHeight > clientHeight + 10
+  const scrollBottom = scrollTop + clientHeight
+  const threshold = contentHeight - 50
+  const isAtBottom = scrollBottom >= threshold
   const shouldShow = canScroll && !isAtBottom
   
-  console.log('[ScrollHint] scrollTop:', scrollTop, 'scrollHeight:', scrollHeight, 'clientHeight:', clientHeight, 'canScroll:', canScroll, 'isAtBottom:', isAtBottom, 'shouldShow:', shouldShow)
   showScrollHint.value = shouldShow
 }
 
@@ -47,11 +58,15 @@ onMounted(() => {
   nextTick(() => {
     checkScrollPosition()
   })
-  window.addEventListener('scroll', checkScrollPosition)
+  window.addEventListener('scroll', checkScrollPosition, true)
+  document.addEventListener('scroll', checkScrollPosition, true)
+  window.addEventListener('resize', checkScrollPosition)
 })
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', checkScrollPosition)
+  window.removeEventListener('scroll', checkScrollPosition, true)
+  document.removeEventListener('scroll', checkScrollPosition, true)
+  window.removeEventListener('resize', checkScrollPosition)
 })
 </script>
 
@@ -69,7 +84,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100dvh;
   background: linear-gradient(135deg, var(--background) 0%, var(--primary-bg) 100%);
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
 }
 

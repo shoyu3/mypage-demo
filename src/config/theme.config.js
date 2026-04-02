@@ -24,19 +24,19 @@ const baseColors = {
 
 // 主题色配置 - 三种可切换的主题色
 const themeColors = {
-  // 紫色主题 (默认)
+  // 粉色主题 (默认)
   purple: {
     light: {
-      primary: '#aa3bff',
-      'primary-hover': '#9333ea',
-      'primary-bg': 'rgba(170, 59, 255, 0.1)',
-      'primary-border': 'rgba(170, 59, 255, 0.5)',
+      primary: '#e5adb7',
+      'primary-hover': '#d49aa5',
+      'primary-bg': 'rgba(229, 173, 183, 0.1)',
+      'primary-border': 'rgba(229, 173, 183, 0.5)',
     },
     dark: {
-      primary: '#c084fc',
-      'primary-hover': '#a855f7',
-      'primary-bg': 'rgba(192, 132, 252, 0.15)',
-      'primary-border': 'rgba(192, 132, 252, 0.5)',
+      primary: '#e5adb7',
+      'primary-hover': '#d49aa5',
+      'primary-bg': 'rgba(229, 173, 183, 0.15)',
+      'primary-border': 'rgba(229, 173, 183, 0.5)',
     },
   },
   // 蓝色主题

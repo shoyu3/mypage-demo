@@ -92,7 +92,7 @@ const themeOptions = computed(() => [
 ])
 
 const colorOptions = [
-  { value: 'purple', label: '紫色', color: '#aa3bff' },
+  { value: 'purple', label: '粉色', color: '#e5adb7' },
   { value: 'blue', label: '蓝色', color: '#3b82f6' },
   { value: 'orange', label: '橙色', color: '#f97316' },
   { value: 'green', label: '绿色', color: '#10b981' },
