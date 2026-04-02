@@ -67,9 +67,10 @@ onUnmounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   background: linear-gradient(135deg, var(--background) 0%, var(--primary-bg) 100%);
   z-index: 0;
+  pointer-events: none;
 }
 
 .content-wrapper {

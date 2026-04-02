@@ -43,13 +43,12 @@ function goHome() {
 <style scoped>
 .not-found {
   width: 100%;
-  height: 100%;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, var(--background) 0%, var(--primary-bg) 100%);
   padding: 1.5rem;
-  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
   position: relative;
   overflow: hidden;
   perspective: 1000px;
