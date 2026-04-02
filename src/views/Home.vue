@@ -94,7 +94,7 @@ onUnmounted(() => {
   width: 100%;
   overflow-x: hidden;
   min-height: 100dvh;
-  padding-bottom: 4rem;
+  padding-bottom: 1rem;
 }
 
 .scroll-hint {
@@ -128,6 +128,23 @@ onUnmounted(() => {
   }
   50% {
     transform: translateY(-6px);
+  }
+}
+
+@media (min-width: 768px) {
+  .scroll-hint {
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce-center 2s infinite;
+  }
+
+  @keyframes bounce-center {
+    0%, 100% {
+      transform: translateX(-50%) translateY(0);
+    }
+    50% {
+      transform: translateX(-50%) translateY(-6px);
+    }
   }
 }
 

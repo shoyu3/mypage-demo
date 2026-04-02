@@ -36,7 +36,7 @@
           </div>
           <div class="stats-section">
             <div class="stat-item">
-              <span class="stat-value">3+</span>
+              <span class="stat-value">5+</span>
               <span class="stat-label">{{ $t('home.stats.years') }}</span>
             </div>
             <div class="stat-item">

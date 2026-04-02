@@ -110,7 +110,7 @@ const statValues = {
   creativity: 95,
   coding: 88,
   nightOwl: 92,
-  bugCollection: 100
+  bugCollection: 82
 }
 </script>
 

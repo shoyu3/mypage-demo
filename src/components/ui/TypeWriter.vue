@@ -103,13 +103,23 @@ watch(() => props.text, () => {
     clearTimeout(timeoutId)
     timeoutId = null
   }
-  // 如果元素已经在视口内，直接开始打字
+  // 重新创建 IntersectionObserver，以便在元素进入视口时触发打字
+  if (observer) {
+    observer.disconnect()
+  }
+  observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !hasStarted.value) {
+          type()
+          observer.disconnect()
+        }
+      })
+    },
+    { threshold: 0.1 }
+  )
   if (elementRef.value) {
-    const rect = elementRef.value.getBoundingClientRect()
-    const isInViewport = rect.top < window.innerHeight && rect.bottom > 0
-    if (isInViewport) {
-      type()
-    }
+    observer.observe(elementRef.value)
   }
 })
 </script>
