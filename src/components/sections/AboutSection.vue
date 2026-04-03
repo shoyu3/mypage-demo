@@ -71,7 +71,7 @@ const storyParagraphs = computed(() => {
   position: relative;
   overflow: hidden;
   perspective: 1000px;
-  min-height: 100vh;
+  min-height: 60vh;
   flex-shrink: 0;
 }
 
